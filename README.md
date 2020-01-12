@@ -3,11 +3,11 @@ game
 
 This project implements the game of Breakout.
 
-Name: 
+Name: Alex Xu (aqx)
 
 ### Timeline
 
-Start Date: 
+Start Date: 1/10/20
 
 Finish Date: 
 
