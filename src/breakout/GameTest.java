@@ -41,6 +41,9 @@ public class GameTest extends Application{
     private Scene myScene;
     private List<Bouncer> myBouncers;
     private Rectangle myPaddle;
+    private List<Brick> myBricks;
+
+    private boolean startClick = false;
 
     /**
      * Initialize what will be displayed and how it will be updated.
@@ -63,17 +66,26 @@ public class GameTest extends Application{
     private Scene setupGame (int width, int height, Paint background) {
         // create one top level collection to organize the things in the scene
         Group root = new Group();
+
         // make some shapes and set their properties
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
         myBouncers = makeBouncers(NUM_BOUNCERS, image, width, height);
+
         myPaddle = new Rectangle(width / 2 - PADDLE_LENGTH / 2, height / 2 + 150, PADDLE_LENGTH, PADDLE_HEIGHT);
         myPaddle.setFill(PADDLE_COLOR);
+
+        Image brickImage = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK1_IMAGE));
+        myBricks = makeBricks(2, brickImage, width, height);
 
         // order added to the group is the order in which they are drawn
         root.getChildren().add(myPaddle);
         for (Bouncer b : myBouncers) {
             root.getChildren().add(b.getView());
         }
+        for (Brick brick : myBricks) {
+            root.getChildren().add(brick.getView());
+        }
+
         // create a place to see the shapes
         Scene scene = new Scene(root, width, height, background);
         // respond to input
@@ -96,16 +108,30 @@ public class GameTest extends Application{
             if (myPaddle.getBoundsInParent().intersects(b.getView().getBoundsInParent())) {
                 myPaddle.setFill(HIGHLIGHT);
                 if(myPaddle.getBoundsInParent().getCenterX() < b.getView().getBoundsInParent().getCenterX()){
-                    b.hit("right");
+                    b.hitPaddle("right");
                 }
                 else{
-                    b.hit("left");
+                    b.hitPaddle("left");
                 }
                 hit = true;
             }
         }
         if (! hit) {
             myPaddle.setFill(Color.BISQUE);
+        }
+
+        //Bounce off Bricks
+        for(Bouncer b: myBouncers){
+            for(Brick brick : myBricks) {
+                if (brick.getView().getBoundsInParent().intersects(b.getView().getBoundsInParent())) {
+                    if (brick.getView().getBoundsInParent().getCenterX() < b.getView().getBoundsInParent().getCenterX()) {
+                        b.hitBrick("right", brick);
+                    } else {
+                        b.hitBrick("left", brick);
+                    }
+                    brick.reduceHealth(1);
+                }
+            }
         }
 
         // bounce off all the walls
@@ -127,7 +153,10 @@ public class GameTest extends Application{
     // What to do each time a key is pressed
     private void handleMouseInput (double x, double y) {
         for (Bouncer b : myBouncers){
-            b.launch();
+            if(!startClick) {
+                b.launch();
+                startClick = true;
+            }
         }
     }
 
@@ -136,6 +165,15 @@ public class GameTest extends Application{
         List<Bouncer> result = new ArrayList<>();
         for (int k = 0; k < maxBouncers; k++) {
             Bouncer b = new Bouncer(image, width, height);
+            result.add(b);
+        }
+        return result;
+    }
+
+    private List<Brick> makeBricks (int num, Image image, int width, int height){
+        List<Brick> result = new ArrayList<>();
+        for (int k = 0; k < num; k++){
+            Brick b = new Brick(image, 1, width, height, 100+k*50, height/2);
             result.add(b);
         }
         return result;

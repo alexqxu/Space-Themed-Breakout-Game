@@ -14,10 +14,8 @@ import java.lang.Math.*;
  * @author Robert C. Duvall
  */
 public class Bouncer {
-    public static final int BOUNCER_MIN_SPEED = -60;
-    public static final int BOUNCER_MAX_SPEED = 60;
-    public static final int BOUNCER_MIN_SIZE = 20;
-    public static final int BOUNCER_MAX_SIZE = 40;
+    public static final int BOUNCER_SPEED = -90;
+    public static final int BOUNCER_SIZE = 25;
 
     private ImageView myView;
     private Point2D myVelocity;
@@ -29,7 +27,7 @@ public class Bouncer {
     public Bouncer (Image image, int screenWidth, int screenHeight) {
         myView = new ImageView(image);
         // make sure it stays a circle
-        int size = 25;
+        int size = BOUNCER_SIZE;
         myView.setFitWidth(size);
         myView.setFitHeight(size);
         // make sure it stays within the bounds
@@ -62,7 +60,7 @@ public class Bouncer {
         }
     }
 
-    public void hit(String side){
+    public void hitPaddle(String side){
         if(side.equals("left")){
             myVelocity = new Point2D(-1*Math.abs(myVelocity.getX()), -myVelocity.getY());
         }
@@ -71,8 +69,18 @@ public class Bouncer {
         }
     }
 
+    public void hitBrick(String side, Brick b){
+        if(b.BRICK_ENABLED) {
+            if (side.equals("left")) {
+                myVelocity = new Point2D(myVelocity.getX() - 10, -myVelocity.getY());
+            } else {
+                myVelocity = new Point2D(myVelocity.getX() + 10, -myVelocity.getY());
+            }
+        }
+    }
+
     public void launch(){
-        myVelocity = new Point2D(20, -70);
+        myVelocity = new Point2D(20, BOUNCER_SPEED);
     }
 
     /**

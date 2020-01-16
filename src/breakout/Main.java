@@ -36,7 +36,14 @@ public class Main extends Application{
         Button startButton;
         startButton = new Button();
         startButton.setText("Start Game");
-        startButton.setOnAction(e -> window.setScene(scene1));
+
+        startButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                GameTest gameView = new GameTest();
+                gameView.start(window);
+            }
+        });
 
         //Back Home Button
         Button backHomeButton = new Button("Back");
