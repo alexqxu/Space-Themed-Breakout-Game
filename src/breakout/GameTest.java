@@ -16,17 +16,22 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 /**
  * Test of Game
  */
 public class GameTest extends Application{
     public static final String TITLE = "Breakout Game";
-    public static final int SIZE = 400;
+    public static final int SIZE = 600;
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.AZURE;
     public static final Paint HIGHLIGHT = Color.OLIVEDRAB;
+
     public static final String BOUNCER_IMAGE = "ball.gif";
     public static final String BRICK1_IMAGE = "brick3.gif";
 
@@ -37,8 +42,11 @@ public class GameTest extends Application{
 
     public static final int NUM_BOUNCERS = 1;
 
+    public static int PLAYER_SCORE = 0;
+
     // some things needed to remember during game
     private Scene myScene;
+
     private List<Bouncer> myBouncers;
     private Rectangle myPaddle;
     private List<Brick> myBricks;
@@ -71,7 +79,7 @@ public class GameTest extends Application{
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
         myBouncers = makeBouncers(NUM_BOUNCERS, image, width, height);
 
-        myPaddle = new Rectangle(width / 2 - PADDLE_LENGTH / 2, height / 2 + 150, PADDLE_LENGTH, PADDLE_HEIGHT);
+        myPaddle = new Rectangle(width / 2 - PADDLE_LENGTH / 2, height / 2 + 250, PADDLE_LENGTH, PADDLE_HEIGHT);
         myPaddle.setFill(PADDLE_COLOR);
 
         Image brickImage = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK1_IMAGE));
@@ -101,6 +109,9 @@ public class GameTest extends Application{
         for (Bouncer b : myBouncers) {
             b.move(elapsedTime);
         }
+
+        //Calculate Score:
+        PLAYER_SCORE = calcScore(myBricks);
 
         // Check collision with the ball
         var hit = false;
@@ -179,6 +190,15 @@ public class GameTest extends Application{
         return result;
     }
 
+    private int calcScore(List<Brick> list){
+        int score = 0;
+        for(int i = 0; i<list.size(); i++){
+            if(!list.get(i).BRICK_ENABLED){
+                score += 10;
+            }
+        }
+        return score;
+    }
 
     /**
      * Start the program.

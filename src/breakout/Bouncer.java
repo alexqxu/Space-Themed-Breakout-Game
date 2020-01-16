@@ -11,10 +11,9 @@ import java.lang.Math.*;
 /**
  * Simple bouncer based on an image that moves and bounces.
  *
- * @author Robert C. Duvall
  */
 public class Bouncer {
-    public static final int BOUNCER_SPEED = -90;
+    public static final int BOUNCER_SPEED = -200;
     public static final int BOUNCER_SIZE = 25;
 
     private ImageView myView;
@@ -32,7 +31,7 @@ public class Bouncer {
         myView.setFitHeight(size);
         // make sure it stays within the bounds
         myView.setX(screenWidth/2);
-        myView.setY(screenHeight/2+125);
+        myView.setY(screenHeight/2+225);
         // turn speed into velocity that can be updated on bounces
         myVelocity = new Point2D(0, 0);
     }
@@ -80,7 +79,7 @@ public class Bouncer {
     }
 
     public void launch(){
-        myVelocity = new Point2D(20, BOUNCER_SPEED);
+        myVelocity = new Point2D(40, BOUNCER_SPEED);
     }
 
     /**

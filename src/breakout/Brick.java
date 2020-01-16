@@ -14,7 +14,7 @@ public class Brick {
 
     public Brick(Image image, int health, int screenWidth, int screenHeight, int locX, int locY){
         myView = new ImageView(image);
-        int size = screenWidth/8;
+        int size = screenWidth/12;
         myView.setFitWidth(size);
 
         myView.setX(locX);
@@ -39,6 +39,4 @@ public class Brick {
     public Node getView () {
         return myView;
     }
-
-
 }

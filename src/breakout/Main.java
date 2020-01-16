@@ -31,7 +31,7 @@ public class Main extends Application{
         window = primaryStage;
 
         Label label1 = new Label("Welcome to BREAKOUT");
-        Label instructions = new Label("Use arrow keys to move, break bricks to win");
+        Label instructions = new Label("Use arrow keys to move, bounce ball to break bricks to win.");
 
         Button startButton;
         startButton = new Button();
@@ -60,11 +60,11 @@ public class Main extends Application{
         VBox layout2 = new VBox(20);
         layout2.getChildren().addAll(instructions, backHomeButton);
 
-        scene1 = new Scene(layout1, 400, 400);
-        scene2 = new Scene(layout2, 400, 400);
+        scene1 = new Scene(layout1, 600, 600);
+        scene2 = new Scene(layout2, 600, 600);
 
         window.setScene(scene1);
-        window.setTitle("BreakOut Game");
+        window.setTitle("Breakout Game");
         window.show();
     }
 }
