@@ -25,13 +25,13 @@ import java.util.Scanner;
 
 public class Levels {
 
-    public static final String LEVEL_1_FILENAME = "Level_1.txt";
-    public static final String LEVEL_2_FILENAME = "Level_2.txt";
-    public static final String LEVEL_3_FILENAME = "Level_3.txt";
+    public static final String LEVEL_1_FILENAME = "resources\\Level_1.txt";
+    public static final String LEVEL_2_FILENAME = "resources\\Level_2.txt";
+    public static final String LEVEL_3_FILENAME = "resources\\Level_3.txt";
 
-    private static final String BRICK1_IMAGE = "brick8.gif";
-    private static final String BRICK2_IMAGE = "brick7.gif";
-    private static final String BRICK3_IMAGE = "brick6.gif";
+    //private static final String BRICK1_IMAGE = "brick8.gif";
+    //private static final String BRICK2_IMAGE = "brick7.gif";
+    //private static final String BRICK3_IMAGE = "brick6.gif";
 
     //private File levelFile;
     //private Scanner sc;
@@ -72,7 +72,7 @@ public class Levels {
             level_val = LEVEL_3_FILENAME;
         }
         String data = "";
-        data = new String(Files.readAllBytes(Paths.get("C:\\Users\\alexx\\Documents\\Classes\\Spring 2020\\CS 308\\game_aqx\\resources\\Level_1.txt")));
+        data = new String(Files.readAllBytes(Paths.get(level_val)));
         return data;
     }
 
@@ -84,9 +84,9 @@ public class Levels {
         int yLoc = 0;
         //String val = sc.next();
 
-        Image brick1Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK1_IMAGE));
-        Image brick2Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK2_IMAGE));
-        Image brick3Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK3_IMAGE));
+        //Image brick1Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK1_IMAGE));
+        //Image brick2Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK2_IMAGE));
+        //Image brick3Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK3_IMAGE));
 
 
         List<Brick> result = new ArrayList<>();
@@ -109,8 +109,11 @@ public class Levels {
 
         for(String d : data){
             int brickValue = Integer.parseInt(d.trim());
-            Brick b = new Brick(brickValue, xLoc, yLoc);
-            result.add(b);
+
+            if(brickValue != 0) {
+                Brick b = new Brick(brickValue, xLoc, yLoc);
+                result.add(b);
+            }
 
             xLoc += 75;
 

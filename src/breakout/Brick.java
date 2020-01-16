@@ -11,9 +11,9 @@ public class Brick {
     public int BRICK_HEALTH;
     public boolean BRICK_ENABLED = true;
 
-    private static final String BRICK1_IMAGE = "brick8.gif";
-    private static final String BRICK2_IMAGE = "brick7.gif";
-    private static final String BRICK3_IMAGE = "brick6.gif";
+    private static final String BRICK1_IMAGE = "brickh1.png";
+    private static final String BRICK2_IMAGE = "brickh2.png";
+    private static final String BRICK3_IMAGE = "brickh3.png";
 
     Image brick1Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK1_IMAGE));
     Image brick2Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK2_IMAGE));
@@ -53,7 +53,7 @@ public class Brick {
         if(health == 1){
             image = brick1Image;
         }
-        else if (health == 3){
+        else if (health == 2){
             image = brick2Image;
         }
         else{
