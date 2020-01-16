@@ -33,7 +33,7 @@ public class GameTest extends Application{
     public static final Paint HIGHLIGHT = Color.OLIVEDRAB;
 
     public static final String BOUNCER_IMAGE = "ball.gif";
-    public static final String BRICK1_IMAGE = "brick3.gif";
+    //public static final String BRICK1_IMAGE = "brick3.gif";
 
     public static final Paint PADDLE_COLOR = Color.PLUM;
     public static final int PADDLE_LENGTH = 80;
@@ -57,7 +57,7 @@ public class GameTest extends Application{
      * Initialize what will be displayed and how it will be updated.
      */
     @Override
-    public void start (Stage stage) {
+    public void start (Stage stage) throws Exception {
         // attach scene to the stage and display it
         myScene = setupGame(SIZE, SIZE, BACKGROUND);
         stage.setScene(myScene);
@@ -71,7 +71,7 @@ public class GameTest extends Application{
         animation.play();
     }
     // Create the game's "scene": what shapes will be in the game and their starting properties
-    private Scene setupGame (int width, int height, Paint background) {
+    private Scene setupGame (int width, int height, Paint background) throws Exception {
         // create one top level collection to organize the things in the scene
         Group root = new Group();
 
@@ -82,8 +82,8 @@ public class GameTest extends Application{
         myPaddle = new Rectangle(width / 2 - PADDLE_LENGTH / 2, height / 2 + 250, PADDLE_LENGTH, PADDLE_HEIGHT);
         myPaddle.setFill(PADDLE_COLOR);
 
-        Image brickImage = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK1_IMAGE));
-        myBricks = makeBricks(2, brickImage, width, height);
+        //Image brickImage = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK1_IMAGE));
+        myBricks = makeBricks();
 
         // order added to the group is the order in which they are drawn
         root.getChildren().add(myPaddle);
@@ -100,6 +100,12 @@ public class GameTest extends Application{
         scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         scene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
         return scene;
+    }
+
+    private List<Brick> makeBricks () throws Exception {
+        Levels level1 = new Levels();
+        //level1.readFile(1);
+        return level1.generate_Bricks();
     }
 
     // Change properties of shapes in small ways to animate them over time
@@ -181,6 +187,7 @@ public class GameTest extends Application{
         return result;
     }
 
+    /*
     private List<Brick> makeBricks (int num, Image image, int width, int height){
         List<Brick> result = new ArrayList<>();
         for (int k = 0; k < num; k++){
@@ -189,6 +196,8 @@ public class GameTest extends Application{
         }
         return result;
     }
+
+     */
 
     private int calcScore(List<Brick> list){
         int score = 0;

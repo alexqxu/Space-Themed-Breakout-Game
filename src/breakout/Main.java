@@ -10,6 +10,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
+
 /**
  * Feel free to completely change this code or delete it entirely. 
  */
@@ -41,7 +43,11 @@ public class Main extends Application{
             @Override
             public void handle(ActionEvent event) {
                 GameTest gameView = new GameTest();
-                gameView.start(window);
+                try {
+                    gameView.start(window);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 

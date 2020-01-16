@@ -13,7 +13,7 @@ import java.lang.Math.*;
  *
  */
 public class Bouncer {
-    public static final int BOUNCER_SPEED = -200;
+    public static final int BOUNCER_SPEED = -300;
     public static final int BOUNCER_SIZE = 25;
 
     private ImageView myView;
@@ -71,9 +71,9 @@ public class Bouncer {
     public void hitBrick(String side, Brick b){
         if(b.BRICK_ENABLED) {
             if (side.equals("left")) {
-                myVelocity = new Point2D(myVelocity.getX() - 10, -myVelocity.getY());
+                myVelocity = new Point2D(myVelocity.getX() - 15, -myVelocity.getY());
             } else {
-                myVelocity = new Point2D(myVelocity.getX() + 10, -myVelocity.getY());
+                myVelocity = new Point2D(myVelocity.getX() + 15, -myVelocity.getY());
             }
         }
     }
