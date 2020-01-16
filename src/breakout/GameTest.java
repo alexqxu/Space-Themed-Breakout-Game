@@ -184,7 +184,7 @@ public class GameTest extends Application{
     private List<Brick> makeBricks (int num, Image image, int width, int height){
         List<Brick> result = new ArrayList<>();
         for (int k = 0; k < num; k++){
-            Brick b = new Brick(image, 1, width, height, 100+k*50, height/2);
+            Brick b = new Brick(image, 1, 100+k*50, height/2);
             result.add(b);
         }
         return result;

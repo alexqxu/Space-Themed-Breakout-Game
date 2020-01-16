@@ -25,6 +25,7 @@ public class Levels {
     public static final String LEVEL_1_FILENAME = "Level_1.txt";
     public static final String LEVEL_2_FILENAME = "Level_2.txt";
     public static final String LEVEL_3_FILENAME = "Level_3.txt";
+    private static final String BRICK1_IMAGE = "brick3.gif";
 
     private File levelFile;
     private Scanner sc;
@@ -45,20 +46,30 @@ public class Levels {
         sc = new Scanner(levelFile);
         sc.useDelimiter(" ");
     }
+
     public void get_Values(){ //Refactor Later
     }
 
-    public List<Brick> generate_Bricks(){
+    public List<Brick> generate_Bricks(int num){
         int xLoc = 0;
         int yLoc = 0;
 
-
-
+        Image brickImage = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK1_IMAGE));
         List<Brick> result = new ArrayList<>();
-        String val = sc.next();
 
-        if(val == "1"){
-            Brick b = new Brick(image, 1, width, height, 100+k*50, height/2);
+        for (int k = 0; k < num; k++) {
+
+            String val = sc.next();
+
+            Brick b = new Brick(brickImage, Integer.parseInt(val), xLoc, yLoc);
+            result.add(b);
+
+            xLoc += 50;
+
+            if (xLoc == 600) {
+                xLoc = 0;
+                yLoc += 50;
+            }
         }
 
         return result;

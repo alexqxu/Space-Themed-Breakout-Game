@@ -12,9 +12,10 @@ public class Brick {
 
     private ImageView myView;
 
-    public Brick(Image image, int health, int screenWidth, int screenHeight, int locX, int locY){
+    public Brick(Image image, int health, int locX, int locY){
         myView = new ImageView(image);
-        int size = screenWidth/12;
+
+        int size = 50;
         myView.setFitWidth(size);
 
         myView.setX(locX);
