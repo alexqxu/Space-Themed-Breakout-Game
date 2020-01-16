@@ -16,10 +16,6 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
 /**
  * Test of Game
  */
@@ -33,7 +29,6 @@ public class GameTest extends Application{
     public static final Paint HIGHLIGHT = Color.OLIVEDRAB;
 
     public static final String BOUNCER_IMAGE = "ball.gif";
-    //public static final String BRICK1_IMAGE = "brick3.gif";
 
     public static final Paint PADDLE_COLOR = Color.PLUM;
     public static final int PADDLE_LENGTH = 80;
@@ -46,6 +41,10 @@ public class GameTest extends Application{
 
     // some things needed to remember during game
     private Scene myScene;
+    private Scene next_Scene;
+    private int old_score;
+
+    private Stage window;
 
     private List<Bouncer> myBouncers;
     private Rectangle myPaddle;
@@ -53,19 +52,28 @@ public class GameTest extends Application{
 
     private boolean startClick = false;
 
+    int myLevel = 1;
+    int prevLevel;
+    int nextLevel;
+
+    KeyFrame frame;
+    Timeline animation;
+
     /**
      * Initialize what will be displayed and how it will be updated.
      */
     @Override
     public void start (Stage stage) throws Exception {
         // attach scene to the stage and display it
+        window = stage;
         myScene = setupGame(SIZE, SIZE, BACKGROUND);
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
-        // attach "game loop" to timeline to play it (basically just calling step() method repeatedly forever)
-        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
-        Timeline animation = new Timeline();
+
+        // attach "game loop" to timeline to play it (basically just calling step() method repeatedly forever)\
+        frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
+        animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
@@ -82,8 +90,7 @@ public class GameTest extends Application{
         myPaddle = new Rectangle(width / 2 - PADDLE_LENGTH / 2, height / 2 + 250, PADDLE_LENGTH, PADDLE_HEIGHT);
         myPaddle.setFill(PADDLE_COLOR);
 
-        //Image brickImage = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK1_IMAGE));
-        myBricks = makeBricks();
+        myBricks = makeBricks(myLevel);
 
         // order added to the group is the order in which they are drawn
         root.getChildren().add(myPaddle);
@@ -102,10 +109,9 @@ public class GameTest extends Application{
         return scene;
     }
 
-    private List<Brick> makeBricks () throws Exception {
-        Levels level1 = new Levels();
-        //level1.readFile(1);
-        return level1.generate_Bricks();
+    private List<Brick> makeBricks (int level) throws Exception {
+        Levels brickConfig = new Levels();
+        return brickConfig.generate_Bricks(level);
     }
 
     // Change properties of shapes in small ways to animate them over time
@@ -117,7 +123,19 @@ public class GameTest extends Application{
         }
 
         //Calculate Score:
-        PLAYER_SCORE = calcScore(myBricks);
+        PLAYER_SCORE = calcScore(myBricks) + old_score;
+
+        if(PLAYER_SCORE == 20){
+            myLevel=2;
+            prevLevel = 1;
+            nextLevel = 2; //Can refactor this into a separate function later on.
+
+            animation.stop();
+            switchScreen oneTwo = new switchScreen();
+            oneTwo.setLevelVals(prevLevel,nextLevel);
+            next_Scene = oneTwo.start_Scene();
+            window.setScene(next_Scene);
+        }
 
         // Check collision with the ball
         var hit = false;
@@ -187,17 +205,12 @@ public class GameTest extends Application{
         return result;
     }
 
-    /*
-    private List<Brick> makeBricks (int num, Image image, int width, int height){
-        List<Brick> result = new ArrayList<>();
-        for (int k = 0; k < num; k++){
-            Brick b = new Brick(image, 1, 100+k*50, height/2);
-            result.add(b);
-        }
-        return result;
+    public void set_Level(int level_val){
+        myLevel = level_val;
     }
-
-     */
+    public void set_Score(int score){
+        old_score = score;
+    }
 
     private int calcScore(List<Brick> list){
         int score = 0;

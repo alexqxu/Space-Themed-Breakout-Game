@@ -79,7 +79,7 @@ public class Bouncer {
     }
 
     public void launch(){
-        myVelocity = new Point2D(60, BOUNCER_SPEED);
+        myVelocity = new Point2D(100, BOUNCER_SPEED);
     }
 
     /**
