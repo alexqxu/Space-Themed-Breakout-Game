@@ -33,7 +33,7 @@ public class GameTest extends Application{
     public static final Paint PADDLE_COLOR = Color.PLUM;
     public static final int PADDLE_LENGTH = 80;
     public static final int PADDLE_HEIGHT = 10;
-    public static final int PADDLE_SPEED = 5;
+    public static final int PADDLE_SPEED = 15;
 
     public static final int NUM_BOUNCERS = 1;
 
@@ -125,7 +125,7 @@ public class GameTest extends Application{
         //Calculate Score:
         PLAYER_SCORE = calcScore(myBricks) + old_score;
 
-        if(PLAYER_SCORE == 20){
+        if(PLAYER_SCORE == 20 && myLevel == 1){
             myLevel=2;
             prevLevel = 1;
             nextLevel = 2; //Can refactor this into a separate function later on.
@@ -133,11 +133,39 @@ public class GameTest extends Application{
             animation.stop();
             switchScreen oneTwo = new switchScreen();
             oneTwo.setLevelVals(prevLevel,nextLevel);
+            oneTwo.set_Score(PLAYER_SCORE);
+            oneTwo.set_Stage(window);
             next_Scene = oneTwo.start_Scene();
             window.setScene(next_Scene);
         }
+        if(PLAYER_SCORE == 50 + 20 && myLevel ==2){ //Refactor later
+            myLevel=3;
+            prevLevel = 2;
+            nextLevel = 3; //Can refactor this into a separate function later on.
 
-        // Check collision with the ball
+            animation.stop();
+            switchScreen midScreen = new switchScreen();
+            midScreen.setLevelVals(prevLevel,nextLevel);
+            midScreen.set_Score(PLAYER_SCORE);
+            midScreen.set_Stage(window);
+            next_Scene = midScreen.start_Scene();
+            window.setScene(next_Scene);
+        }
+        if(PLAYER_SCORE == 70 + 50 && myLevel ==2){ //Refactor later
+            myLevel=0;
+            prevLevel = 3;
+            nextLevel = 0; //Can refactor this into a separate function later on.
+
+            animation.stop();
+            switchScreen midScreen = new switchScreen();
+            midScreen.setLevelVals(prevLevel,nextLevel);
+            midScreen.set_Score(PLAYER_SCORE);
+            midScreen.set_Stage(window);
+            next_Scene = midScreen.start_Scene();
+            window.setScene(next_Scene);
+        }
+
+        // Check collision with the ball with paddle
         var hit = false;
         for (Bouncer b : myBouncers) {
             if (myPaddle.getBoundsInParent().intersects(b.getView().getBoundsInParent())) {
@@ -211,6 +239,7 @@ public class GameTest extends Application{
     public void set_Score(int score){
         old_score = score;
     }
+    public Stage return_Stage(){return window;}
 
     private int calcScore(List<Brick> list){
         int score = 0;

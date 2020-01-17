@@ -12,15 +12,27 @@ import javafx.stage.Stage;
 
 public class switchScreen{
 
+    Stage myStage;
     Scene scene1;
 
     int prevLevel;
     int nextLevel;
+    int myScore;
 
     public void setLevelVals(int pLevel, int nLevel){
         prevLevel = pLevel;
         nextLevel = nLevel;
     }
+
+    public void set_Score(int score){
+        myScore = score;
+    }
+
+    public void set_Stage(Stage s){
+        myStage = s;
+    }
+
+
     public Scene start_Scene(){
         Label label1 = new Label("You beat LEVEL " + prevLevel + "! Move on to LEVEL " + nextLevel + "?");
 
@@ -31,6 +43,14 @@ public class switchScreen{
             @Override
             public void handle(ActionEvent event) {
                 //PUT ACTION HERE
+                GameTest nextGame = new GameTest();
+                nextGame.set_Level(nextLevel);
+                nextGame.set_Score(myScore);
+                try {
+                    nextGame.start(myStage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -41,8 +61,9 @@ public class switchScreen{
         scene1 = new Scene(layout1, 600, 600);
 
         return scene1;
-        //window.setScene(scene1);
-        //window.setTitle("Breakout Game");
-        //window.show();
     }
+
+    //public Scene finish_Screen(){
+    //   return new Scene = ;
+    //}
 }
