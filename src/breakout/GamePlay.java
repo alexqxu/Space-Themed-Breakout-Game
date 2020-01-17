@@ -222,11 +222,14 @@ public class GamePlay extends Application{
         for (Bouncer b : myBouncers) {
             if (myPaddle.getBoundsInParent().intersects(b.getView().getBoundsInParent())) {
                 myPaddle.setFill(HIGHLIGHT);
-                if(myPaddle.getBoundsInParent().getCenterX() < b.getView().getBoundsInParent().getCenterX()){
+                if(myPaddle.getBoundsInParent().getMinX() + myPaddle.getWidth()/3 > b.getView().getBoundsInParent().getCenterX()){ //myPaddle.getBoundsInParent().getCenterX() < b.getView().getBoundsInParent().getCenterX()
+                    b.hitPaddle("left");
+                }
+                else if(myPaddle.getBoundsInParent().getMaxX() - myPaddle.getWidth()/3 < b.getView().getBoundsInParent().getCenterX()){
                     b.hitPaddle("right");
                 }
                 else{
-                    b.hitPaddle("left");
+                    b.hitPaddle("middle");
                 }
                 hit = true;
             }

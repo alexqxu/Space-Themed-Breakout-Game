@@ -68,8 +68,11 @@ public class Bouncer {
         if(side.equals("left")){
             myVelocity = new Point2D(-1*Math.abs(myVelocity.getX()), -myVelocity.getY());
         }
-        else{
+        else if (side.equals("right")){
             myVelocity = new Point2D(Math.abs(myVelocity.getX()), -myVelocity.getY());
+        }
+        else{
+            myVelocity = new Point2D(0, -myVelocity.getY());
         }
     }
 
