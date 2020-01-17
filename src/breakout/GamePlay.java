@@ -45,6 +45,7 @@ public class GamePlay extends Application{
     private Scene myScene;
     private Scene next_Scene;
     private int old_score;
+    Label scoreValueLabel;
 
     private Stage window;
 
@@ -107,15 +108,21 @@ public class GamePlay extends Application{
 
         Label levelValueLabel = new Label("" + myLevel);
         levelValueLabel.setLayoutX(620);
-        levelValueLabel.setLayoutY(40);
+        levelValueLabel.setLayoutY(50);
 
+        Label scoreLabel = new Label("SCORE:");
+        scoreLabel.setLayoutX(620);
+        scoreLabel.setLayoutY(80);
 
+        scoreValueLabel = new Label("" + PLAYER_SCORE);
+        scoreValueLabel.setLayoutX(620);
+        scoreValueLabel.setLayoutY(100);
 
         // order added to the group is the order in which they are drawn
 
         root.getChildren().add(backgroundView);
 
-        root.getChildren().addAll(levelLabel, levelValueLabel);
+        root.getChildren().addAll(levelLabel, levelValueLabel, scoreLabel, scoreValueLabel);
 
         root.getChildren().add(myPaddle);
         for (Bouncer b : myBouncers) {
@@ -148,6 +155,7 @@ public class GamePlay extends Application{
 
         //Calculate Score:
         PLAYER_SCORE = calcScore(myBricks) + old_score;
+        scoreValueLabel.setText("" + PLAYER_SCORE);
 
         //Checks if Level is Beat
         if(PLAYER_SCORE == 20 && myLevel == 1){
