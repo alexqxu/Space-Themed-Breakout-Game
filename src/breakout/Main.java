@@ -64,8 +64,8 @@ public class Main extends Application{
         VBox layout2 = new VBox(20);
         layout2.getChildren().addAll(instructions, backHomeButton);
 
-        scene1 = new Scene(layout1, 600, 600);
-        scene2 = new Scene(layout2, 600, 600);
+        scene1 = new Scene(layout1, 700, 600);
+        scene2 = new Scene(layout2, 700, 600);
 
         window.setScene(scene1);
         window.setTitle("Breakout Game");

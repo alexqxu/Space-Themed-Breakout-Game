@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -99,9 +100,23 @@ public class GamePlay extends Application{
 
         myBricks = makeBricks(myLevel);
 
+        //Labels to display player stats
+        Label levelLabel = new Label("LEVEL:");
+        levelLabel.setLayoutX(620);
+        levelLabel.setLayoutY(30);
+
+        Label levelValueLabel = new Label("" + myLevel);
+        levelValueLabel.setLayoutX(620);
+        levelValueLabel.setLayoutY(40);
+
+
+
         // order added to the group is the order in which they are drawn
 
         root.getChildren().add(backgroundView);
+
+        root.getChildren().addAll(levelLabel, levelValueLabel);
+
         root.getChildren().add(myPaddle);
         for (Bouncer b : myBouncers) {
             root.getChildren().add(b.getView());
@@ -216,9 +231,9 @@ public class GamePlay extends Application{
     // What to do each time a key is pressed
     private void handleKeyInput (KeyCode code) {
         if(startClick) {
-            if (code == KeyCode.RIGHT) {
+            if (code == KeyCode.RIGHT && myPaddle.getX() < myScene.getWidth() - PADDLE_LENGTH - 100) {
                 myPaddle.setX(myPaddle.getX() + PADDLE_SPEED);
-            } else if (code == KeyCode.LEFT) {
+            } else if (code == KeyCode.LEFT && myPaddle.getX() > 0) {
                 myPaddle.setX(myPaddle.getX() - PADDLE_SPEED);
             }
         }

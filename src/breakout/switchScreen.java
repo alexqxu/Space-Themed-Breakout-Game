@@ -56,7 +56,7 @@ public class switchScreen{
         VBox layout1 = new VBox(20);
         layout1.getChildren().addAll(label1, okButton);
 
-        scene1 = new Scene(layout1, 600, 600);
+        scene1 = new Scene(layout1, 700, 600);
 
         return scene1;
     }
