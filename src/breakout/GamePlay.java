@@ -170,6 +170,7 @@ public class GamePlay extends Application{
         //Calculate Lives:
         calcLives(myBouncers);
         livesValueLabel.setText(""+PLAYER_LIVES);
+        resetBall(myBouncers);
 
         //Checks if Level is Beat
         if(PLAYER_SCORE == 20 && myLevel == 1){
@@ -246,8 +247,9 @@ public class GamePlay extends Application{
 
         // bounce off all the walls
         for (Bouncer b : myBouncers) {
-            b.bounce(myScene.getWidth()-100, myScene.getHeight());
+            b.bounce(myScene.getWidth()-100);
         }
+
     }
 
 
@@ -303,8 +305,17 @@ public class GamePlay extends Application{
 
     private void calcLives(List<Bouncer> myBouncers) {
         for(Bouncer b : myBouncers){
-            if (b.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()){
+            if (b.returnBallStatus() && b.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()){
                 PLAYER_LIVES--;
+            }
+        }
+    }
+
+    private void resetBall(List<Bouncer> myBouncers){
+        for(Bouncer b: myBouncers){
+            if (b.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()) {
+                b.resetPosandVel();
+                startClick = false;
             }
         }
     }

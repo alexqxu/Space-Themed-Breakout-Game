@@ -15,9 +15,13 @@ public class Bouncer {
     public static final int BOUNCER_SPEED = -400;
     public static final int BOUNCER_SIZE = 25;
 
+    private boolean BALL_ENABLED = true;
+
     private ImageView myView;
     private Point2D myVelocity;
 
+    int initXPos;
+    int initYPos;
 
     /**
      * Create a bouncer from a given image with random attributes.
@@ -29,8 +33,10 @@ public class Bouncer {
         myView.setFitWidth(size);
         myView.setFitHeight(size);
         // make sure it stays within the bounds
-        myView.setX(screenWidth/2);
-        myView.setY(screenHeight/2+225);
+
+        setXPos(screenWidth/2 - BOUNCER_SIZE/2);
+        setYPos(screenHeight/2+225);
+
         // turn speed into velocity that can be updated on bounces
         myVelocity = new Point2D(0, 0);
     }
@@ -48,12 +54,12 @@ public class Bouncer {
     /**
      * Bounce off the walls represented by the edges of the screen.
      */
-    public void bounce (double screenWidth, double screenHeight) {
+    public void bounce (double screenWidth) {
         // collide all bouncers against the walls
         if (myView.getX() < 0 || myView.getX() > screenWidth - myView.getBoundsInLocal().getWidth()) {
             myVelocity = new Point2D(-myVelocity.getX(), myVelocity.getY());
         }
-        if (myView.getY() < 0 || myView.getY() > screenHeight - myView.getBoundsInLocal().getHeight()) { //MAGIC NUMBER
+        if (myView.getY() < 0) { //MAGIC NUMBER
             myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
         }
     }
@@ -81,10 +87,41 @@ public class Bouncer {
         myVelocity = new Point2D(200, BOUNCER_SPEED);
     }
 
+    public boolean returnBallStatus(){
+        return BALL_ENABLED;
+    }
+
+    public int getXPos(){
+        return (int)myView.getX();
+    }
+
+    public int getYPos(){
+        return (int)myView.getY();
+    }
+
+    public void setXPos(int xPosition){
+        initXPos = xPosition;
+        myView.setX(xPosition);
+    }
+
+    public void setYPos(int yPosition){
+        initYPos = yPosition;
+        myView.setY(yPosition);
+    }
+
+    public void resetPosandVel(){
+        setXPos(initXPos);
+        setYPos(initYPos);
+        myVelocity = new Point2D(0, 0);
+    }
+
+
     /**
      * Returns internal view of bouncer to interact with other JavaFX methods.
      */
     public Node getView () {
         return myView;
     }
+
+
 }
