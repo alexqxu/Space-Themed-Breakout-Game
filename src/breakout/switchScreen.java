@@ -13,7 +13,7 @@ public class switchScreen{
     Stage myStage;
     Scene scene1;
 
-    int prevLevel;
+    int prevLevel; //THIS MAY BE REFACTORED LATER SO THAT IT ACCESSES A PUBLIC VARIABLE FROM THE GAMEPLAY.
     int nextLevel;
     int myScore;
 

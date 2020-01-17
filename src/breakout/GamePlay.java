@@ -40,12 +40,14 @@ public class GamePlay extends Application{
     public static final int NUM_BOUNCERS = 1;
 
     public static int PLAYER_SCORE = 0;
+    public static int PLAYER_LIVES = 5;
 
     // some things needed to remember during game
     private Scene myScene;
     private Scene next_Scene;
     private int old_score;
     Label scoreValueLabel;
+    Label livesValueLabel;
 
     private Stage window;
 
@@ -118,11 +120,19 @@ public class GamePlay extends Application{
         scoreValueLabel.setLayoutX(620);
         scoreValueLabel.setLayoutY(100);
 
+        Label livesLabel = new Label("LIVES LEFT: ");
+        livesLabel.setLayoutX(620);
+        livesLabel.setLayoutY(130);
+
+        livesValueLabel = new Label(""+ PLAYER_LIVES);
+        livesValueLabel.setLayoutX(620);
+        livesValueLabel.setLayoutY(150);
+
         // order added to the group is the order in which they are drawn
 
         root.getChildren().add(backgroundView);
 
-        root.getChildren().addAll(levelLabel, levelValueLabel, scoreLabel, scoreValueLabel);
+        root.getChildren().addAll(levelLabel, levelValueLabel, scoreLabel, scoreValueLabel, livesLabel, livesValueLabel);
 
         root.getChildren().add(myPaddle);
         for (Bouncer b : myBouncers) {
@@ -156,6 +166,10 @@ public class GamePlay extends Application{
         //Calculate Score:
         PLAYER_SCORE = calcScore(myBricks) + old_score;
         scoreValueLabel.setText("" + PLAYER_SCORE);
+
+        //Calculate Lives:
+        calcLives(myBouncers);
+        livesValueLabel.setText(""+PLAYER_LIVES);
 
         //Checks if Level is Beat
         if(PLAYER_SCORE == 20 && myLevel == 1){
@@ -236,6 +250,8 @@ public class GamePlay extends Application{
         }
     }
 
+
+
     // What to do each time a key is pressed
     private void handleKeyInput (KeyCode code) {
         if(startClick) {
@@ -283,6 +299,14 @@ public class GamePlay extends Application{
             }
         }
         return score;
+    }
+
+    private void calcLives(List<Bouncer> myBouncers) {
+        for(Bouncer b : myBouncers){
+            if (b.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()){
+                PLAYER_LIVES--;
+            }
+        }
     }
 
     /**
