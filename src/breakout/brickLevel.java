@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Levels {
+public class brickLevel {
 
     public static final String LEVEL_1_FILENAME = "resources\\Level_1.txt";
     public static final String LEVEL_2_FILENAME = "resources\\Level_2.txt";

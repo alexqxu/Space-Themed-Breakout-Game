@@ -6,11 +6,11 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Test of Game
  */
-public class GameTest extends Application{
+public class GamePlay extends Application{
     public static final String TITLE = "Breakout Game";
     public static final int SIZE = 600;
     public static final int FRAMES_PER_SECOND = 60;
@@ -29,6 +29,7 @@ public class GameTest extends Application{
     public static final Paint HIGHLIGHT = Color.OLIVEDRAB;
 
     public static final String BOUNCER_IMAGE = "ball.gif";
+    public static final String BACKGROUND_IMAGE = "game_Background700x600.png";
 
     public static final Paint PADDLE_COLOR = Color.PLUM;
     public static final int PADDLE_LENGTH = 80;
@@ -66,7 +67,9 @@ public class GameTest extends Application{
     public void start (Stage stage) throws Exception {
         // attach scene to the stage and display it
         window = stage;
-        myScene = setupGame(SIZE, SIZE, BACKGROUND);
+        window.setResizable(false); //Implement for menus as well
+
+        myScene = setupGame(SIZE+100, SIZE, BACKGROUND);
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
@@ -83,6 +86,10 @@ public class GameTest extends Application{
         // create one top level collection to organize the things in the scene
         Group root = new Group();
 
+        //Background Image:
+        Image backgroundImage = new Image(this.getClass().getClassLoader().getResourceAsStream(BACKGROUND_IMAGE));
+        ImageView backgroundView = new ImageView(backgroundImage);
+
         // make some shapes and set their properties
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
         myBouncers = makeBouncers(NUM_BOUNCERS, image, width, height);
@@ -93,6 +100,8 @@ public class GameTest extends Application{
         myBricks = makeBricks(myLevel);
 
         // order added to the group is the order in which they are drawn
+
+        root.getChildren().add(backgroundView);
         root.getChildren().add(myPaddle);
         for (Bouncer b : myBouncers) {
             root.getChildren().add(b.getView());
@@ -110,7 +119,7 @@ public class GameTest extends Application{
     }
 
     private List<Brick> makeBricks (int level) throws Exception {
-        Levels brickConfig = new Levels();
+        brickLevel brickConfig = new brickLevel();
         return brickConfig.generate_Bricks(level);
     }
 
@@ -125,6 +134,7 @@ public class GameTest extends Application{
         //Calculate Score:
         PLAYER_SCORE = calcScore(myBricks) + old_score;
 
+        //Checks if Level is Beat
         if(PLAYER_SCORE == 20 && myLevel == 1){
             myLevel=2;
             prevLevel = 1;
@@ -199,17 +209,18 @@ public class GameTest extends Application{
 
         // bounce off all the walls
         for (Bouncer b : myBouncers) {
-            b.bounce(myScene.getWidth(), myScene.getHeight());
+            b.bounce(myScene.getWidth()-100, myScene.getHeight());
         }
     }
 
     // What to do each time a key is pressed
     private void handleKeyInput (KeyCode code) {
-        if (code == KeyCode.RIGHT) {
-            myPaddle.setX(myPaddle.getX() + PADDLE_SPEED);
-        }
-        else if (code == KeyCode.LEFT) {
-            myPaddle.setX(myPaddle.getX() - PADDLE_SPEED);
+        if(startClick) {
+            if (code == KeyCode.RIGHT) {
+                myPaddle.setX(myPaddle.getX() + PADDLE_SPEED);
+            } else if (code == KeyCode.LEFT) {
+                myPaddle.setX(myPaddle.getX() - PADDLE_SPEED);
+            }
         }
     }
 

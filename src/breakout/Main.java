@@ -6,7 +6,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -40,7 +39,7 @@ public class Main extends Application{
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GameTest gameView = new GameTest();
+                GamePlay gameView = new GamePlay();
                 try {
                     gameView.set_Level(1);
                     gameView.start(window);

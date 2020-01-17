@@ -53,7 +53,7 @@ public class Bouncer {
         if (myView.getX() < 0 || myView.getX() > screenWidth - myView.getBoundsInLocal().getWidth()) {
             myVelocity = new Point2D(-myVelocity.getX(), myVelocity.getY());
         }
-        if (myView.getY() < 0 || myView.getY() > screenHeight - myView.getBoundsInLocal().getHeight()) {
+        if (myView.getY() < 0 || myView.getY() > screenHeight - myView.getBoundsInLocal().getHeight()) { //MAGIC NUMBER
             myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
         }
     }
@@ -78,7 +78,7 @@ public class Bouncer {
     }
 
     public void launch(){
-        myVelocity = new Point2D(100, BOUNCER_SPEED);
+        myVelocity = new Point2D(200, BOUNCER_SPEED);
     }
 
     /**
