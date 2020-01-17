@@ -174,7 +174,7 @@ public class GamePlay extends Application{
         //Calculate Lives:
         calcLives(myBouncers);
         livesValueLabel.setText(""+PLAYER_LIVES);
-        resetBall(myBouncers);
+        resetBallifDead(myBouncers);
 
         //Checks if Level is Beat
         if(PLAYER_SCORE == 20 && myLevel == 1){
@@ -327,13 +327,30 @@ public class GamePlay extends Application{
         }
     }
 
-    private void resetBall(List<Bouncer> myBouncers){
+    private void resetBallifDead(List<Bouncer> myBouncers){          //////////REFACTOR WITH isDead later!
         for(Bouncer b: myBouncers){
             if (b.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()) {
-                b.resetPosandVel();
+                resetPaddle();
+                resetBall(b);
                 startClick = false;
             }
         }
+    }
+
+    private boolean isDead(List<Bouncer> myBouncers){
+        for(Bouncer b: myBouncers){
+            if (b.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void resetPaddle(){
+        myPaddle.setX(myScene.getWidth() / 2 - PADDLE_LENGTH / 2);
+    }
+    private void resetBall(Bouncer bouncer){
+        bouncer.resetPosandVel();
     }
 
     /**

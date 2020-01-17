@@ -34,8 +34,8 @@ public class Bouncer {
         myView.setFitHeight(size);
         // make sure it stays within the bounds
 
-        setXPos(screenWidth/2 - BOUNCER_SIZE/2);
-        setYPos(screenHeight/2+225);
+        setinitXPos(screenWidth/2 - BOUNCER_SIZE/2);
+        setinitYPos(screenHeight/2+225);
 
         // turn speed into velocity that can be updated on bounces
         myVelocity = new Point2D(0, 0);
@@ -96,13 +96,21 @@ public class Bouncer {
     }
 
     public void setXPos(int xPosition){
-        initXPos = xPosition;
         myView.setX(xPosition);
     }
 
     public void setYPos(int yPosition){
-        initYPos = yPosition;
         myView.setY(yPosition);
+    }
+
+    public void setinitXPos(int xPosition){
+        initXPos = xPosition;
+        setXPos(xPosition);
+    }
+
+    public void setinitYPos(int yPosition){
+        initYPos = yPosition;
+        setYPos(yPosition);
     }
 
     public void resetPosandVel(){
