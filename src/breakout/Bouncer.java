@@ -87,10 +87,6 @@ public class Bouncer {
         myVelocity = new Point2D(200, BOUNCER_SPEED);
     }
 
-    public boolean returnBallStatus(){
-        return BALL_ENABLED;
-    }
-
     public int getXPos(){
         return (int)myView.getX();
     }

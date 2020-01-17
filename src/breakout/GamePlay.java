@@ -52,6 +52,7 @@ public class GamePlay extends Application{
     private Stage window;
 
     private List<Bouncer> myBouncers;
+    private Bouncer bouncer1;
     private Rectangle myPaddle;
     private List<Brick> myBricks;
 
@@ -97,6 +98,9 @@ public class GamePlay extends Application{
         // make some shapes and set their properties
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
         myBouncers = makeBouncers(NUM_BOUNCERS, image, width, height);
+                                                                                                                        /////////////////REFACTOR THIS LATER//////////////
+        bouncer1 = myBouncers.get(0);
+        /////////////////////////
 
         myPaddle = new Rectangle(width / 2 - PADDLE_LENGTH / 2, height / 2 + 250, PADDLE_LENGTH, PADDLE_HEIGHT);
         myPaddle.setFill(PADDLE_COLOR);
@@ -252,15 +256,27 @@ public class GamePlay extends Application{
 
     }
 
-
-
     // What to do each time a key is pressed
     private void handleKeyInput (KeyCode code) {
+        /*
         if(startClick) {
             if (code == KeyCode.RIGHT && myPaddle.getX() < myScene.getWidth() - PADDLE_LENGTH - 100) {
                 myPaddle.setX(myPaddle.getX() + PADDLE_SPEED);
             } else if (code == KeyCode.LEFT && myPaddle.getX() > 0) {
                 myPaddle.setX(myPaddle.getX() - PADDLE_SPEED);
+            }
+        }
+         */
+
+        if (code == KeyCode.RIGHT && myPaddle.getX() < myScene.getWidth() - PADDLE_LENGTH - 100) {
+            myPaddle.setX(myPaddle.getX() + PADDLE_SPEED);
+            if(!startClick){
+                 myBouncers.get(0).setXPos(bouncer1.getXPos() + PADDLE_SPEED);
+            }
+        } else if (code == KeyCode.LEFT && myPaddle.getX() > 0) {
+            myPaddle.setX(myPaddle.getX() - PADDLE_SPEED);
+            if(!startClick){
+                myBouncers.get(0).setXPos(bouncer1.getXPos() - PADDLE_SPEED);
             }
         }
     }
@@ -305,7 +321,7 @@ public class GamePlay extends Application{
 
     private void calcLives(List<Bouncer> myBouncers) {
         for(Bouncer b : myBouncers){
-            if (b.returnBallStatus() && b.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()){
+            if (b.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()){
                 PLAYER_LIVES--;
             }
         }
