@@ -66,10 +66,10 @@ public class Bouncer {
 
     public void hitPaddle(String side){
         if(side.equals("left")){
-            myVelocity = new Point2D(-1*Math.abs(myVelocity.getX()), -myVelocity.getY());
+            myVelocity = new Point2D(-1*Math.abs(myVelocity.getX()) -10, -myVelocity.getY()); //-1*Math.abs(myVelocity.getX()), -myVelocity.getY()
         }
         else if (side.equals("right")){
-            myVelocity = new Point2D(Math.abs(myVelocity.getX()), -myVelocity.getY());
+            myVelocity = new Point2D(Math.abs(myVelocity.getX()) +10, -myVelocity.getY());
         }
         else{
             myVelocity = new Point2D(0, -myVelocity.getY());

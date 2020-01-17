@@ -3,9 +3,12 @@ package breakout;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -35,6 +38,7 @@ public class Main extends Application{
         Button startButton;
         startButton = new Button();
         startButton.setText("Start Game");
+        startButton.setLayoutX(100);
 
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -53,18 +57,25 @@ public class Main extends Application{
         Button backHomeButton = new Button("Back");
         backHomeButton.setOnAction(e -> window.setScene(scene1));
 
+        //Rules Button
         Button rulesButton = new Button("Rules");
         rulesButton.setOnAction(e -> window.setScene(scene2));
 
         //Layout, Vertical
-        VBox layout1 = new VBox(20);
-        layout1.getChildren().addAll(label1, rulesButton, startButton);
+        //VBox layout1 = new VBox(20);
+        //layout1.getChildren().addAll(label1, rulesButton, startButton);
 
         //Layout 2
         VBox layout2 = new VBox(20);
         layout2.getChildren().addAll(instructions, backHomeButton);
 
-        scene1 = new Scene(layout1, 700, 600);
+        Group newLayout = new Group();
+        Image backgroundImage = new Image(this.getClass().getClassLoader().getResourceAsStream("HomeMenuBackground700x600.png"));
+        ImageView backgroundView = new ImageView(backgroundImage);
+        newLayout.getChildren().addAll(backgroundView, rulesButton, startButton);
+
+        //scene1 = new Scene(layout1, 700, 600);
+        scene1 = new Scene(newLayout, 700, 600);
         scene2 = new Scene(layout2, 700, 600);
 
         window.setScene(scene1);
