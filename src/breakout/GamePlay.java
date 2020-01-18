@@ -34,7 +34,7 @@ public class GamePlay extends Application{
     public static final String BACKGROUND_IMAGE = "game_Background700x600.png";
 
     public static final Paint PADDLE_COLOR = Color.PLUM;
-    public static final int PADDLE_LENGTH = 80;
+    public static int PADDLE_LENGTH = 80;
     public static final int PADDLE_HEIGHT = 10;
     public static final int PADDLE_SPEED = 15;
 
@@ -100,10 +100,11 @@ public class GamePlay extends Application{
         // make some shapes and set their properties
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
         myBouncers = makeBouncers(NUM_BOUNCERS, image, width, height);
-                                                                                                                        /////////////////REFACTOR THIS LATER//////////////
+        //myBouncers.get(0).resetSpeed();                                                                                 /////////////////REFACTOR THIS LATER//////////////
         bouncer1 = myBouncers.get(0);
         /////////////////////////
 
+        resetPaddleLength();
         myPaddle = new Rectangle(width / 2 - PADDLE_LENGTH / 2, height / 2 + 250, PADDLE_LENGTH, PADDLE_HEIGHT);
         myPaddle.setFill(PADDLE_COLOR);
 
@@ -194,10 +195,10 @@ public class GamePlay extends Application{
         //Calculate Lives:
         calcLives(myBouncers);
         livesValueLabel.setText(""+PLAYER_LIVES);
-        resetBallifDead(myBouncers);
+        resetBallandPaddleifDead(myBouncers);
 
         //Checks if Level is Beat
-        if(PLAYER_SCORE == 20 && myLevel == 1){
+        if(PLAYER_SCORE == 60 && myLevel == 1){
             myLevel=2;
             prevLevel = 1;
             nextLevel = 2; //Can refactor this into a separate function later on.
@@ -210,7 +211,7 @@ public class GamePlay extends Application{
             next_Scene = oneTwo.start_Scene();
             window.setScene(next_Scene);
         }
-        if(PLAYER_SCORE == 50 + 20 && myLevel ==2){ //Refactor later
+        if(PLAYER_SCORE == 50 + 60 && myLevel ==2){ //Refactor later
             myLevel=3;
             prevLevel = 2;
             nextLevel = 3; //Can refactor this into a separate function later on.
@@ -223,7 +224,7 @@ public class GamePlay extends Application{
             next_Scene = midScreen.start_Scene();
             window.setScene(next_Scene);
         }
-        if(PLAYER_SCORE == 70 + 50 && myLevel ==2){ //Refactor later
+        if(PLAYER_SCORE == 70 + 50 && myLevel == 3){ //Refactor later
             myLevel=0;
             prevLevel = 3;
             nextLevel = 0; //Can refactor this into a separate function later on.
@@ -289,9 +290,12 @@ public class GamePlay extends Application{
                     powerup.delete();
                 }
                 else if(powerup.getPowerType().equals("length")){
+                    myPaddle.setWidth(myPaddle.getWidth()*1.5); //WILL NEED TO REFACTOR
+                    PADDLE_LENGTH=(int)(PADDLE_LENGTH*1.5);
                     powerup.delete();
                 }
                 else if(powerup.getPowerType().equals("health")){
+                    PLAYER_LIVES++;
                     powerup.delete();
                 }
             }
@@ -395,7 +399,7 @@ public class GamePlay extends Application{
         }
     }
 
-    private void resetBallifDead(List<Bouncer> myBouncers){          //////////REFACTOR WITH isDead later!
+    private void resetBallandPaddleifDead(List<Bouncer> myBouncers){          //////////REFACTOR WITH isDead later!
         for(Bouncer b: myBouncers){
             if (b.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()) {
                 resetPaddle();
@@ -416,6 +420,10 @@ public class GamePlay extends Application{
 
     private void resetPaddle(){
         myPaddle.setX(myScene.getWidth() / 2 - PADDLE_LENGTH / 2);
+    }
+
+    private void resetPaddleLength(){
+        PADDLE_LENGTH = 80;
     }
     private void resetBall(Bouncer bouncer){
         bouncer.resetPosandVel();

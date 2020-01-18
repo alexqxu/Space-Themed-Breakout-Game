@@ -12,7 +12,7 @@ import javafx.scene.image.ImageView;
  *
  */
 public class Bouncer {
-    public static int BOUNCER_SPEED = -400;
+    public int BOUNCER_SPEED = -400;
     public static final int BOUNCER_SIZE = 25;
 
     //private boolean BALL_ENABLED = true;
@@ -138,7 +138,11 @@ public class Bouncer {
 
     public void reduceSpeed(double reductionFactor){
         myVelocity = new Point2D(myVelocity.getX() * reductionFactor, myVelocity.getY()*reductionFactor);
-        BOUNCER_SPEED = (int)(BOUNCER_SPEED*reductionFactor);
+        BOUNCER_SPEED = (int)(BOUNCER_SPEED*reductionFactor); //Slows time for next launch as well, but creates problem where in the future levels time is always slowed. Will have to refactor, with a final constant, and a non-final constant. Non final constant gets changed.
+    }
+
+    public void resetSpeed(){ //may not need
+        BOUNCER_SPEED = -400;
     }
 
 
