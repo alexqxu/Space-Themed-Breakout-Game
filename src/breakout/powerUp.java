@@ -6,10 +6,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class powerUp {
-    public static final int POWERUP_SPEED = -100;
-    public static final int POWERUP_SIZE = 15;
+    public static final int POWERUP_SPEED = 100;
+    public static final int POWERUP_SIZE = 25;
 
-    public static final String STRENGTH_POWERUP_FILE = "strengthPowerUp.gif";
+    public static final String STRENGTH_POWERUP_FILE = "strengthPowerUp.png";
     public static final String TIME_POWERUP_FILE = "timePowerUp.png";
     public static final String LENGTH_POWERUP_FILE = "lengthPowerUp.png";
     public static final String HEALTH_POWERUP_FILE = "healthPowerUp.png";
@@ -24,14 +24,15 @@ public class powerUp {
 
     private int initXPosition;
     private int initYPosition;
+    private int mySpeed = 0;
 
     String myPowerUpType;
 
-    public powerUp(int xPosition, int yPosition, int type){
+    public powerUp(int xPosition, int yPosition, String type){
         initXPosition = xPosition;
         initYPosition = yPosition;
 
-        set_Skin(type);
+        set_Type(type);
 
         myView = new ImageView(image);
 
@@ -41,10 +42,12 @@ public class powerUp {
 
         myView.setX(initXPosition); //REFACTOR LATER IN THE STYLE THAT IS IN BOUNCER.JAVA
         myView.setY(initYPosition);
+
+        //myView.setImage(null);
     }
 
     public void move(double elapsedTime){
-        myView.setY(myView.getY() + POWERUP_SPEED * elapsedTime);
+        myView.setY(myView.getY() + mySpeed * elapsedTime);
     }
 
     public void set_Type(String typeOfPowerUp){
@@ -76,6 +79,22 @@ public class powerUp {
         else{
             image = HealthPowerUp;
         }
+    }
+
+    public void showImage(){   //Can get rid of later.
+        myView.setImage(image);
+    }
+
+    public void startDrop(){
+        mySpeed = POWERUP_SPEED;
+    }
+
+    public int getXPos(){
+        return initXPosition;
+    }
+
+    public int getYPos(){
+        return initYPosition;
     }
 
     /**

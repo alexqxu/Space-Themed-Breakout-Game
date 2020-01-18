@@ -43,8 +43,25 @@ public class brickLevel {
         for(String d : data){
             int brickValue = Integer.parseInt(d.trim());
 
-            if(brickValue != 0) {
-                Brick b = new Brick(brickValue, xLoc, yLoc);
+            if(brickValue == 11) {                              //MIGHT CHANGE THIS LATER TO CHECK LETTERS, TO MAKE DESIGNING LEVELS MORE INTUITIVE.
+                Brick b = new Brick(brickValue/10, xLoc, yLoc, "strength");
+                result.add(b);
+            }
+            else if(brickValue == 12){
+                Brick b = new Brick(brickValue/10, xLoc, yLoc, "time");
+                result.add(b);
+            }
+            else if(brickValue == 13){
+                Brick b = new Brick(brickValue/10, xLoc, yLoc, "length");
+                result.add(b);
+            }
+            else if(brickValue == 14){
+                Brick b = new Brick(brickValue/10, xLoc, yLoc, "health");
+                result.add(b);
+            }
+
+            else if(brickValue != 0) {
+                Brick b = new Brick(brickValue, xLoc, yLoc, "none");
                 result.add(b);
             }
 

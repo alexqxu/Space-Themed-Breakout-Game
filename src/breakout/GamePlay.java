@@ -56,6 +56,7 @@ public class GamePlay extends Application{
     private Bouncer bouncer1;
     private Rectangle myPaddle;
     private List<Brick> myBricks;
+    private List<powerUp> myPowerUps;
 
     private boolean startClick = false;
 
@@ -107,6 +108,7 @@ public class GamePlay extends Application{
         myPaddle.setFill(PADDLE_COLOR);
 
         myBricks = makeBricks(myLevel);
+        myPowerUps = makePowerUps(myBricks);
 
         //Labels to display player stats
         Label levelLabel = new Label("LEVEL:");
@@ -140,11 +142,16 @@ public class GamePlay extends Application{
         root.getChildren().addAll(levelLabel, levelValueLabel, scoreLabel, scoreValueLabel, livesLabel, livesValueLabel);
 
         root.getChildren().add(myPaddle);
+
         for (Bouncer b : myBouncers) {
             root.getChildren().add(b.getView());
         }
         for (Brick brick : myBricks) {
             root.getChildren().add(brick.getView());
+        }
+
+        for (powerUp pu : myPowerUps){
+            root.getChildren().add(pu.getView());
         }
 
         // create a place to see the shapes
@@ -166,6 +173,18 @@ public class GamePlay extends Application{
         // update "actors" attributes
         for (Bouncer b : myBouncers) {
             b.move(elapsedTime);
+        }
+
+        for (powerUp powerup : myPowerUps){
+            powerup.move(elapsedTime);
+        }
+
+        //Checks if the powerups should start dropping.
+        for(Brick brick : myBricks){
+            for(powerUp powerup : myPowerUps)
+            if(!brick.BRICK_ENABLED && brick.getXLoc() == powerup.getXPos()){
+                powerup.startDrop();
+            }
         }
 
         //Calculate Score:
@@ -302,6 +321,31 @@ public class GamePlay extends Application{
             Bouncer b = new Bouncer(image, width, height);
             result.add(b);
         }
+        return result;
+    }
+
+    private List<powerUp> makePowerUps (List<Brick> brickList){
+        List<powerUp> result = new ArrayList<>();
+            for(Brick brick : brickList){
+                powerUp p;
+
+                if(brick.getPowerUp().equals("strength")){
+                    p = new powerUp(brick.getXLoc(),brick.getYLoc(), "strength");
+                }
+                else if(brick.getPowerUp().equals("time")){
+                    p = new powerUp(brick.getXLoc(),brick.getYLoc(), "time");
+                }
+                else if(brick.getPowerUp().equals("length")){
+                    p = new powerUp(brick.getXLoc(),brick.getYLoc(), "length");
+                }
+                else if(brick.getPowerUp().equals("health")){
+                    p = new powerUp(brick.getXLoc(),brick.getYLoc(), "health");
+                }
+                else{
+                    p = new powerUp(brick.getXLoc(),brick.getYLoc(), "none");
+                }
+                result.add(p);
+            }
         return result;
     }
 
