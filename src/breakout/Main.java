@@ -32,8 +32,8 @@ public class Main extends Application{
     public void start(Stage primaryStage) {
         window = primaryStage;
 
-        Label label1 = new Label("Welcome to BREAKOUT");
-        Label instructions = new Label("Use arrow keys to move, bounce ball to break bricks to win.");
+        //Label label1 = new Label("Welcome to BREAKOUT");
+        //Label instructions = new Label("Use arrow keys to move, bounce ball to break bricks to win.");
 
         Button startButton;
         startButton = new Button();
@@ -69,17 +69,22 @@ public class Main extends Application{
         //layout1.getChildren().addAll(label1, rulesButton, startButton);
 
         //Layout 2
-        VBox layout2 = new VBox(20);
-        layout2.getChildren().addAll(instructions, backHomeButton);
+        //VBox layout2 = new VBox(20);
+        //layout2.getChildren().addAll(instructions, backHomeButton);
 
         Group newLayout = new Group();
         Image backgroundImage = new Image(this.getClass().getClassLoader().getResourceAsStream("HomeMenuBackground700x600.png"));
         ImageView backgroundView = new ImageView(backgroundImage);
         newLayout.getChildren().addAll(backgroundView, rulesButton, startButton);
 
+        Group rulesLayout = new Group();
+        Image rulesImage = new Image(this.getClass().getClassLoader().getResourceAsStream("RulesScreenBackground700x600.png"));
+        ImageView rulesView = new ImageView(rulesImage);
+        rulesLayout.getChildren().addAll(rulesView, backHomeButton);
+
         //scene1 = new Scene(layout1, 700, 600);
         scene1 = new Scene(newLayout, 700, 600);
-        scene2 = new Scene(layout2, 700, 600);
+        scene2 = new Scene(rulesLayout, 700, 600);
 
         window.setScene(scene1);
         window.setTitle("Breakout Game");
