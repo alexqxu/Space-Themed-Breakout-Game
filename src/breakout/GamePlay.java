@@ -33,6 +33,9 @@ public class GamePlay extends Application{
     public static final String BOUNCER_IMAGE = "ball.gif";
     public static final String BACKGROUND_IMAGE = "game_Background700x600.png";
 
+    public static final String INSTRUCTION_TEXT1 = "UseArrowKeys.gif";
+    public static final String INSTRUCTION_TEXT2 = "ClickToBegin.gif";
+
     public static final Paint PADDLE_COLOR = Color.PLUM;
     public static int PADDLE_LENGTH = 80;
     public static final int PADDLE_HEIGHT = 10;
@@ -67,6 +70,9 @@ public class GamePlay extends Application{
     KeyFrame frame;
     Timeline animation;
 
+    ImageView UseArrowKeys;
+    ImageView ClickToBegin;
+
     /**
      * Initialize what will be displayed and how it will be updated.
      */
@@ -96,6 +102,19 @@ public class GamePlay extends Application{
         //Background Image:
         Image backgroundImage = new Image(this.getClass().getClassLoader().getResourceAsStream(BACKGROUND_IMAGE));
         ImageView backgroundView = new ImageView(backgroundImage);
+
+        //Instructional Text Images:
+        Image instruction1 = new Image(this.getClass().getClassLoader().getResourceAsStream(INSTRUCTION_TEXT1));
+        Image instruction2 = new Image(this.getClass().getClassLoader().getResourceAsStream(INSTRUCTION_TEXT2));
+
+        UseArrowKeys = new ImageView(instruction1);
+        UseArrowKeys.setLayoutX(width/2 - 50 - instruction1.getWidth()/2);                                 //MAGIC NUMBER, FIX LATER.
+        UseArrowKeys.setLayoutY(height/2 - instruction1.getHeight());
+
+        ClickToBegin = new ImageView(instruction2);
+        ClickToBegin.setLayoutX(width/2 -50 - instruction2.getWidth()/2);                                  //Magic number
+        ClickToBegin.setLayoutY(height/2 + instruction2.getHeight());
+
 
         // make some shapes and set their properties
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
@@ -155,6 +174,10 @@ public class GamePlay extends Application{
             root.getChildren().add(pu.getView());
         }
 
+        //ADD INSTRUCTION TEXT TO GROUP HERE.
+        root.getChildren().add(UseArrowKeys);
+        root.getChildren().add(ClickToBegin);
+
         // create a place to see the shapes
         Scene scene = new Scene(root, width, height, background);
         // respond to input
@@ -171,6 +194,13 @@ public class GamePlay extends Application{
     // Change properties of shapes in small ways to animate them over time
     // Note, there are more sophisticated ways to animate shapes, but these simple ways work fine to start
     private void step (double elapsedTime) {
+        //Get rid of instructional text at the start of each level/launching of the ball
+        if(startClick){
+            ClickToBegin.setImage(null);        //Refactor !!
+            UseArrowKeys.setImage(null);
+        }
+
+
         // update "actors" attributes
         for (Bouncer b : myBouncers) {
             b.move(elapsedTime);
