@@ -20,6 +20,7 @@ import java.util.List;
 /**
  * Test of Game
  */
+
 public class GamePlay extends Application{
     public static final String TITLE = "Breakout Game";
     public static final int SIZE = 600;

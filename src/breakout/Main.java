@@ -38,7 +38,8 @@ public class Main extends Application{
         Button startButton;
         startButton = new Button();
         startButton.setText("Start Game");
-        startButton.setLayoutX(100);
+        startButton.setLayoutX(120);
+        startButton.setLayoutY(300);
 
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -60,6 +61,8 @@ public class Main extends Application{
         //Rules Button
         Button rulesButton = new Button("Rules");
         rulesButton.setOnAction(e -> window.setScene(scene2));
+        rulesButton.setLayoutX(120);
+        rulesButton.setLayoutY(250);
 
         //Layout, Vertical
         //VBox layout1 = new VBox(20);

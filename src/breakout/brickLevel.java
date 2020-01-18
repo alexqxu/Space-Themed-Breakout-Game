@@ -48,11 +48,11 @@ public class brickLevel {
                 result.add(b);
             }
 
-            xLoc += 75;
+            xLoc += 100;
 
             if (xLoc == 600) {
                 xLoc = 0;
-                yLoc += 25;
+                yLoc += 40;
             }
         }
 

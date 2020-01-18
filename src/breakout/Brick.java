@@ -26,8 +26,10 @@ public class Brick {
         set_Skin(health);
         myView = new ImageView(image);
 
-        int size = 50;
-        myView.setFitWidth(size);
+        int horizontalSize = 75;
+        int verticalSize = 30;
+        myView.setFitWidth(horizontalSize);
+        myView.setFitHeight(verticalSize);
 
         myView.setX(locX);
         myView.setY(locY);

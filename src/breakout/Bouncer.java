@@ -15,7 +15,7 @@ public class Bouncer {
     public static final int BOUNCER_SPEED = -400;
     public static final int BOUNCER_SIZE = 25;
 
-    private boolean BALL_ENABLED = true;
+    //private boolean BALL_ENABLED = true;
 
     private ImageView myView;
     private Point2D myVelocity;
@@ -34,7 +34,7 @@ public class Bouncer {
         myView.setFitHeight(size);
         // make sure it stays within the bounds
 
-        setinitXPos(screenWidth/2 - BOUNCER_SIZE/2);
+        setinitXPos(screenWidth/2 - BOUNCER_SIZE/2); //FIX MAGIC NUMBER
         setinitYPos(screenHeight/2+225);
 
         // turn speed into velocity that can be updated on bounces
