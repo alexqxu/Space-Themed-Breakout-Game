@@ -277,6 +277,26 @@ public class GamePlay extends Application{
             b.bounce(myScene.getWidth()-100);
         }
 
+        //Powerup collision with paddle
+        for(powerUp powerup : myPowerUps){
+            if (powerup.isEnabled() && myPaddle.getBoundsInParent().intersects(powerup.getView().getBoundsInParent())){
+                if(powerup.getPowerType().equals("strength")){
+                    myBouncers.get(0).increaseSize(1.25);
+                    powerup.delete();
+                }
+                else if(powerup.getPowerType().equals("time")){
+                    myBouncers.get(0).reduceSpeed(0.5);
+                    powerup.delete();
+                }
+                else if(powerup.getPowerType().equals("length")){
+
+                }
+                else if(powerup.getPowerType().equals("health")){
+
+                }
+            }
+        }
+
     }
 
     // What to do each time a key is pressed

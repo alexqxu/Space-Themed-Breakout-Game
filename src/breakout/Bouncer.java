@@ -12,7 +12,7 @@ import javafx.scene.image.ImageView;
  *
  */
 public class Bouncer {
-    public static final int BOUNCER_SPEED = -400;
+    public static int BOUNCER_SPEED = -400;
     public static final int BOUNCER_SIZE = 25;
 
     //private boolean BALL_ENABLED = true;
@@ -120,6 +120,25 @@ public class Bouncer {
         setXPos(initXPos);
         setYPos(initYPos);
         myVelocity = new Point2D(0, 0);
+    }
+
+    public void increaseSize(double increaseFactor){
+        double initialWidth = myView.getFitWidth();
+        double afterWidth = initialWidth*increaseFactor;
+
+        double initialHeight = myView.getFitHeight();
+        double afterHeight = initialHeight*increaseFactor;
+
+        myView.setFitWidth(afterWidth);
+        myView.setFitHeight(afterHeight);
+
+        initYPos = (int)(initYPos - (afterHeight - initialHeight));
+        initXPos = (int)(initXPos - (afterWidth - initialWidth)/2);
+    }
+
+    public void reduceSpeed(double reductionFactor){
+        myVelocity = new Point2D(myVelocity.getX() * reductionFactor, myVelocity.getY()*reductionFactor);
+        BOUNCER_SPEED = (int)(BOUNCER_SPEED*reductionFactor);
     }
 
 

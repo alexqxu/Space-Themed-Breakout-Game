@@ -25,8 +25,9 @@ public class powerUp {
     private int initXPosition;
     private int initYPosition;
     private int mySpeed = 0;
+    private boolean Enabled;
 
-    String myPowerUpType;
+    private String myPowerUpType;
 
     public powerUp(int xPosition, int yPosition, String type){
         initXPosition = xPosition;
@@ -43,6 +44,7 @@ public class powerUp {
         myView.setX(initXPosition); //REFACTOR LATER IN THE STYLE THAT IS IN BOUNCER.JAVA
         myView.setY(initYPosition);
 
+        Enabled = true;
         //myView.setImage(null);
     }
 
@@ -85,6 +87,19 @@ public class powerUp {
         myView.setImage(image);
     }
 
+    private void hideImage(){
+        myView.setImage(null);
+    }
+
+    private void disable(){
+        Enabled=false;
+    }
+
+    public void delete(){
+        disable();
+        hideImage();
+    }
+
     public void startDrop(){
         mySpeed = POWERUP_SPEED;
     }
@@ -95,6 +110,14 @@ public class powerUp {
 
     public int getYPos(){
         return initYPosition;
+    }
+
+    public String getPowerType(){
+        return myPowerUpType;
+    }
+
+    public boolean isEnabled(){
+        return Enabled;
     }
 
     /**
