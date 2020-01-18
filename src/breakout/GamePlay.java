@@ -182,7 +182,7 @@ public class GamePlay extends Application{
         //Checks if the powerups should start dropping.
         for(Brick brick : myBricks){
             for(powerUp powerup : myPowerUps)
-            if(!brick.BRICK_ENABLED && brick.getXLoc() == powerup.getXPos()){
+            if(!brick.BRICK_ENABLED && brick.getXLoc() == powerup.getXPos() && brick.getYLoc() == powerup.getYPos()){
                 powerup.startDrop();
             }
         }
@@ -289,10 +289,10 @@ public class GamePlay extends Application{
                     powerup.delete();
                 }
                 else if(powerup.getPowerType().equals("length")){
-
+                    powerup.delete();
                 }
                 else if(powerup.getPowerType().equals("health")){
-
+                    powerup.delete();
                 }
             }
         }
