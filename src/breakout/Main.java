@@ -57,6 +57,8 @@ public class Main extends Application{
         //Back Home Button
         Button backHomeButton = new Button("Back");
         backHomeButton.setOnAction(e -> window.setScene(scene1));
+        backHomeButton.setLayoutX(40);
+        backHomeButton.setLayoutY(40);
 
         //Rules Button
         Button rulesButton = new Button("Rules");
