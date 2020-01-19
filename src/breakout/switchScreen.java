@@ -91,6 +91,7 @@ public class switchScreen{
     }
 
     public Group finish_Screen(){
+        play_WinAudio();
         Group layout = new Group();
         Image backgroundImage = new Image(this.getClass().getClassLoader().getResourceAsStream("YouWin700x600.png"));
         ImageView backgroundView = new ImageView(backgroundImage);
@@ -141,4 +142,11 @@ public class switchScreen{
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.play();
     }
+
+    private void play_WinAudio(){
+        Media media = new Media(new File("resources\\winGameEffect.mp3").toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
+    }
+
 }

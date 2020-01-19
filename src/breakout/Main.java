@@ -8,7 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 /**
  * Feel free to completely change this code or delete it entirely. 
@@ -21,6 +25,8 @@ public class Main extends Application{
     Stage window;
     Scene scene1, scene2;
 
+    MediaPlayer backGroundMusic;
+
     public static void main (String[] args) {
         launch(args);
     }
@@ -28,6 +34,7 @@ public class Main extends Application{
 
     @Override
     public void start(Stage primaryStage) {
+        play_BackgroundAudio();
         window = primaryStage;
 
         Button startButton;
@@ -39,6 +46,7 @@ public class Main extends Application{
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                stopBackGroundAudio();
                 GamePlay gameView = new GamePlay();
                 try {
                     gameView.set_Level(1);
@@ -79,5 +87,15 @@ public class Main extends Application{
         window.setScene(scene1);
         window.setTitle("Breakout Game");
         window.show();
+    }
+
+    private void play_BackgroundAudio(){
+        Media media = new Media(new File("resources\\3909-industrial-cinematic-by-kevin-macleod.mp3").toURI().toString());
+        backGroundMusic = new MediaPlayer(media);
+        backGroundMusic.play();
+    }
+
+    private void stopBackGroundAudio(){
+        backGroundMusic.stop();
     }
 }
