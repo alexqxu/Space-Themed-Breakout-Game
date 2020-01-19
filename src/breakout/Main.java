@@ -36,6 +36,7 @@ public class Main extends Application{
     public void start(Stage primaryStage) {
         play_BackgroundAudio();
         window = primaryStage;
+        window.setResizable(false);
 
         Button startButton;
         startButton = new Button();
@@ -92,6 +93,7 @@ public class Main extends Application{
     private void play_BackgroundAudio(){
         Media media = new Media(new File("resources\\3909-industrial-cinematic-by-kevin-macleod.mp3").toURI().toString());
         backGroundMusic = new MediaPlayer(media);
+        backGroundMusic.setCycleCount(MediaPlayer.INDEFINITE); //PLAY INDEFINITELY
         backGroundMusic.play();
     }
 

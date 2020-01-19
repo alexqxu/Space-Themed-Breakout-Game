@@ -28,8 +28,10 @@ public class GamePlay extends Application{
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+
     public static final Paint BACKGROUND = Color.AZURE;
-    public static final Paint HIGHLIGHT = Color.OLIVEDRAB;
+
+    //public static final Paint HIGHLIGHT = Color.OLIVEDRAB;
 
     public static final String BOUNCER_IMAGE = "ball.gif";
     public static final String BACKGROUND_IMAGE = "game_Background700x600.png";
@@ -37,21 +39,15 @@ public class GamePlay extends Application{
     public static final String INSTRUCTION_TEXT1 = "UseArrowKeys.gif";
     public static final String INSTRUCTION_TEXT2 = "ClickToBegin.gif";
 
-    public static final Paint PADDLE_COLOR = Color.PLUM;
-    public static int PADDLE_LENGTH = 80;
-    public static final int PADDLE_HEIGHT = 10;
-    public static final int PADDLE_SPEED = 15;
+    //public static final Paint PADDLE_COLOR = Color.PLUM;
+    //public static int PADDLE_LENGTH = 80;
+    //public static final int PADDLE_HEIGHT = 10;
+    //public static final int PADDLE_SPEED = 15;
 
     public static final int NUM_BOUNCERS = 1;
 
     public static int PLAYER_SCORE = 0;
     public static int PLAYER_LIVES = 5;
-
-    //ADD CODE THAT SETS SCORE THRESHOLD FOR EACH LEVEL HERE.
-    //level1 and threshold1
-    //level2 and threshold2, or level2 and threshold1+2
-
-    //When you jump to a certain level (OR USE A CHEATCODE), your score will be erased.
 
     // some things needed to remember during game
     private Scene myScene;
@@ -64,7 +60,12 @@ public class GamePlay extends Application{
 
     private List<Bouncer> myBouncers;
     private Bouncer bouncer1;
-    private Rectangle myPaddle;
+
+    private Paddle myPaddle;
+    private Rectangle myPaddleView;
+
+    //private Rectangle myPaddle; //SWITCH TO PADDLE OBJECT.
+
     private List<Brick> myBricks;
     private List<powerUp> myPowerUps;
 
@@ -79,6 +80,7 @@ public class GamePlay extends Application{
     KeyFrame frame;
     Timeline animation;
 
+    //Gifs that play, telling the player what to do.
     ImageView UseArrowKeys;
     ImageView ClickToBegin;
 
@@ -124,7 +126,6 @@ public class GamePlay extends Application{
         ClickToBegin.setLayoutX(width/2 -50 - instruction2.getWidth()/2);                                  //Magic number
         ClickToBegin.setLayoutY(height/2 + instruction2.getHeight());
 
-
         // make some shapes and set their properties
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
         myBouncers = makeBouncers(NUM_BOUNCERS, image, width, height);
@@ -132,9 +133,13 @@ public class GamePlay extends Application{
         bouncer1 = myBouncers.get(0);
         /////////////////////////
 
-        resetPaddleLength();
-        myPaddle = new Rectangle(width / 2 - PADDLE_LENGTH / 2, height / 2 + 250, PADDLE_LENGTH, PADDLE_HEIGHT);
-        myPaddle.setFill(PADDLE_COLOR);
+        myPaddle = new Paddle(SIZE + 100, SIZE);
+        myPaddle.resetPaddleWidthToOriginal();
+        myPaddleView = myPaddle.getShape();
+
+        //resetPaddleLength();
+        //myPaddle = new Rectangle(width / 2 - PADDLE_LENGTH / 2, height / 2 + 250, PADDLE_LENGTH, PADDLE_HEIGHT);
+        //myPaddle.setFill(PADDLE_COLOR);
 
         myBricks = makeBricks(myLevel);
         myPowerUps = makePowerUps(myBricks);
@@ -170,7 +175,7 @@ public class GamePlay extends Application{
 
         root.getChildren().addAll(levelLabel, levelValueLabel, scoreLabel, scoreValueLabel, livesLabel, livesValueLabel);
 
-        root.getChildren().add(myPaddle);
+        root.getChildren().add(myPaddleView);
 
         for (Bouncer b : myBouncers) {
             root.getChildren().add(b.getView());
@@ -189,11 +194,12 @@ public class GamePlay extends Application{
 
         // create a place to see the shapes
         Scene scene = new Scene(root, width, height, background);
+
         // respond to input
         scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         scene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
         return scene;
-    }
+}
 
     // Change properties of shapes in small ways to animate them over time
     // Note, there are more sophisticated ways to animate shapes, but these simple ways work fine to start
@@ -289,12 +295,12 @@ public class GamePlay extends Application{
         // Check collision with the ball with paddle
         var hit = false;
         for (Bouncer b : myBouncers) {
-            if (myPaddle.getBoundsInParent().intersects(b.getView().getBoundsInParent())) {
-                myPaddle.setFill(HIGHLIGHT);
-                if(myPaddle.getBoundsInParent().getMinX() + myPaddle.getWidth()/3 > b.getView().getBoundsInParent().getCenterX()){ //myPaddle.getBoundsInParent().getCenterX() < b.getView().getBoundsInParent().getCenterX()
+            if (myPaddle.getShape().getBoundsInParent().intersects(b.getView().getBoundsInParent())) {
+                myPaddle.highlight();
+                if(myPaddle.getShape().getBoundsInParent().getMinX() + myPaddle.getShape().getWidth()/3 > b.getView().getBoundsInParent().getCenterX()){ //myPaddle.getBoundsInParent().getCenterX() < b.getView().getBoundsInParent().getCenterX()
                     b.hitPaddle("left");
                 }
-                else if(myPaddle.getBoundsInParent().getMaxX() - myPaddle.getWidth()/3 < b.getView().getBoundsInParent().getCenterX()){
+                else if(myPaddle.getShape().getBoundsInParent().getMaxX() - myPaddle.getShape().getWidth()/3 < b.getView().getBoundsInParent().getCenterX()){
                     b.hitPaddle("right");
                 }
                 else{
@@ -304,7 +310,7 @@ public class GamePlay extends Application{
             }
         }
         if (! hit) {
-            myPaddle.setFill(Color.BISQUE);
+            myPaddle.resetColor();
         }
 
         //Bounce off Bricks
@@ -328,7 +334,7 @@ public class GamePlay extends Application{
 
         //Powerup collision with paddle
         for(powerUp powerup : myPowerUps){
-            if (powerup.isEnabled() && myPaddle.getBoundsInParent().intersects(powerup.getView().getBoundsInParent())){
+            if (powerup.isEnabled() && myPaddle.getShape().getBoundsInParent().intersects(powerup.getView().getBoundsInParent())){
                 if(powerup.getPowerType().equals("strength")){
                     myBouncers.get(0).increaseSize(1.25);
                     powerup.delete();
@@ -338,8 +344,10 @@ public class GamePlay extends Application{
                     powerup.delete();
                 }
                 else if(powerup.getPowerType().equals("length")){
-                    myPaddle.setWidth(myPaddle.getWidth()*1.5); //WILL NEED TO REFACTOR
-                    PADDLE_LENGTH=(int)(PADDLE_LENGTH*1.5);
+                    myPaddle.handleIncreaseLengthPowerup();
+                    //myPaddle.getShape().setWidth(myPaddle.getShape().getWidth()*1.5); //WILL NEED TO REFACTOR
+                    //PADDLE_LENGTH=(int)(PADDLE_LENGTH*1.5);
+
                     powerup.delete();
                 }
                 else if(powerup.getPowerType().equals("health")){
@@ -349,40 +357,33 @@ public class GamePlay extends Application{
             }
         }
 
+        myPaddleView = myPaddle.getShape();
     }
 
     // What to do each time a key is pressed
     private void handleKeyInput (KeyCode code) {
-        /*
-        if(startClick) {
-            if (code == KeyCode.RIGHT && myPaddle.getX() < myScene.getWidth() - PADDLE_LENGTH - 100) {
-                myPaddle.setX(myPaddle.getX() + PADDLE_SPEED);
-            } else if (code == KeyCode.LEFT && myPaddle.getX() > 0) {
-                myPaddle.setX(myPaddle.getX() - PADDLE_SPEED);
-            }
-        }
-         */
 
-        if (code == KeyCode.RIGHT && myPaddle.getX() < myScene.getWidth() - PADDLE_LENGTH - 100) {
-            myPaddle.setX(myPaddle.getX() + PADDLE_SPEED);
+        if (code == KeyCode.RIGHT && myPaddle.getShape().getX() < myScene.getWidth() - myPaddle.getShape().getWidth() - 100) {
+            myPaddle.moveRight();
             if(!startClick){
-                 myBouncers.get(0).setXPos(bouncer1.getXPos() + PADDLE_SPEED);
+                 myBouncers.get(0).setXPos(bouncer1.getXPos() + myPaddle.PADDLE_SPEED);
             }
-        } else if (code == KeyCode.LEFT && myPaddle.getX() > 0) {
-            myPaddle.setX(myPaddle.getX() - PADDLE_SPEED);
+        } else if (code == KeyCode.LEFT && myPaddle.getShape().getX() > 0) {
+            myPaddle.moveLeft();
             if(!startClick){
-                myBouncers.get(0).setXPos(bouncer1.getXPos() - PADDLE_SPEED);
+                myBouncers.get(0).setXPos(bouncer1.getXPos() - myPaddle.PADDLE_SPEED);
             }
         }
+
         //CHEAT CODES:
 
         else if(code == KeyCode.L){
             PLAYER_LIVES++;
         }
         else if(code == KeyCode.R){
-            resetPaddle();
-            resetPaddleLength();
-            myPaddle.setWidth(PADDLE_LENGTH);
+            myPaddle.resetPaddleToStartingPosition();
+            myPaddle.resetPaddleWidthToOriginal();
+            //myPaddle.setWidth(PADDLE_LENGTH); //reset Paddle width
 
             resetBall(myBouncers.get(0));
             startClick = false;
@@ -428,12 +429,13 @@ public class GamePlay extends Application{
         }
         else if(code == KeyCode.P && startClick){
             if(longMode) {
-                myPaddle.setWidth(PADDLE_LENGTH);
+                myPaddle.resetPaddleWidth();
                 longMode = false;
             }
             else {
-                myPaddle.setX(0);
-                myPaddle.setWidth(myScene.getWidth() - 100); //WILL NEED TO REFACTOR
+                myPaddle.setXLoc(0);
+                //myPaddle.setWidth(myScene.getWidth() - 100); //WILL NEED TO REFACTOR
+                myPaddle.setMaxPaddleLength();
                 longMode = true;
             }
         }
@@ -455,7 +457,7 @@ public class GamePlay extends Application{
     }
 
     private List<Brick> makeBricks (int level) throws Exception {
-        brickLevel brickConfig = new brickLevel();
+        brickLevelGenerator brickConfig = new brickLevelGenerator();
         return brickConfig.generate_Bricks(level);
     }
 
@@ -532,7 +534,7 @@ public class GamePlay extends Application{
     private void resetBallandPaddleifDead(List<Bouncer> myBouncers){          //////////REFACTOR WITH isDead later!
         for(Bouncer b: myBouncers){
             if (b.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()) {
-                resetPaddle();
+                myPaddle.resetPaddleToStartingPosition(); //reset paddle to starting position
                 resetBall(b);
                 startClick = false;
             }
@@ -548,13 +550,14 @@ public class GamePlay extends Application{
         return false;
     }
 
-    private void resetPaddle(){
-        myPaddle.setX(myScene.getWidth() / 2 - PADDLE_LENGTH / 2); //magic value
-    }
 
-    private void resetPaddleLength(){
-        PADDLE_LENGTH = 80;
-    }
+    //private void resetPaddle(){ //Reset paddle to starting position.
+    //    myPaddle.setX(myScene.getWidth() / 2 - PADDLE_LENGTH / 2); //magic value
+    //}
+
+   // private void resetPaddleLength(){
+   //     PADDLE_LENGTH = 80;
+   // }
     private void resetBall(Bouncer bouncer){
         bouncer.resetPosandVel();
     }
