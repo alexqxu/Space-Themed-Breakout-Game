@@ -67,6 +67,8 @@ public class GamePlay extends Application{
     private List<Brick> myBricks;
     private List<powerUp> myPowerUps;
 
+    private boolean longMode = false;
+
     private boolean startClick = false;
 
     int myLevel = 1;
@@ -378,6 +380,9 @@ public class GamePlay extends Application{
         }
         else if(code == KeyCode.R){
             resetPaddle();
+            resetPaddleLength();
+            myPaddle.setWidth(PADDLE_LENGTH);
+
             resetBall(myBouncers.get(0));
             startClick = false;
         }
@@ -420,10 +425,18 @@ public class GamePlay extends Application{
             next_Scene = midScreen.start_Scene();
             window.setScene(next_Scene);
         }
-        else if(code == KeyCode.P){
-
+        else if(code == KeyCode.P && startClick){
+            if(longMode) {
+                myPaddle.setWidth(PADDLE_LENGTH);
+                longMode = false;
+            }
+            else {
+                myPaddle.setX(0);
+                myPaddle.setWidth(myScene.getWidth() - 100); //WILL NEED TO REFACTOR
+                longMode = true;
+            }
         }
-        else if(code == KeyCode.D){
+        else if(code == KeyCode.D){ //Reduce health of bricks to 1.
 
         }
     }
