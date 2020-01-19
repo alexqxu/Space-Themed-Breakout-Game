@@ -71,23 +71,15 @@ public class Brick {
         }
     }
 
+    public void reduceHealthTo1(){
+        if(BRICK_ENABLED){
+            BRICK_HEALTH = 1;
+            set_Skin(BRICK_HEALTH);
+            myView.setImage(image);
+        }
+    }
+
     public void set_Skin(int health){
-        /*
-        if(PowerUp.equals("strength")){
-            image = brickStrengthImage;
-        }
-        else if(PowerUp.equals("time")){
-            image = brickTimeImage;
-        }
-        else if(PowerUp.equals("length")){
-            image = brickLengthImage;
-        }
-        else if(PowerUp.equals("health")){
-            image = brickHealthImage;
-        }
-
-         */
-
         if(health == 1){
             image = brick1Image;
         }

@@ -437,7 +437,9 @@ public class GamePlay extends Application{
             }
         }
         else if(code == KeyCode.D){ //Reduce health of bricks to 1.
-
+            for(Brick brick : myBricks){
+                brick.reduceHealthTo1();
+            }
         }
     }
 
@@ -546,7 +548,7 @@ public class GamePlay extends Application{
     }
 
     private void resetPaddle(){
-        myPaddle.setX(myScene.getWidth() / 2 - PADDLE_LENGTH / 2);
+        myPaddle.setX(myScene.getWidth() / 2 - PADDLE_LENGTH / 2); //magic value
     }
 
     private void resetPaddleLength(){
