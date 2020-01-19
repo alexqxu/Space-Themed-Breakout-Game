@@ -47,6 +47,8 @@ public class Main extends Application{
                 GamePlay gameView = new GamePlay();
                 try {
                     gameView.set_Level(1);
+                    gameView.set_Score(0);
+                    gameView.PLAYER_LIVES = 5; //MAGIC NUMBER
                     gameView.start(window);
                 } catch (Exception e) {
                     e.printStackTrace();
