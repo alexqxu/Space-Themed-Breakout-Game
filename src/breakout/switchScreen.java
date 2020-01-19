@@ -33,6 +33,7 @@ public class switchScreen{
 
     public Scene start_Scene(){
         Label label1 = new Label("You beat LEVEL " + prevLevel + "! Move on to LEVEL " + nextLevel + "?");
+        Label label2 = new Label("Your Current Score Is: " + myScore);
 
         Button okButton = new Button();
         okButton.setText("OK");
@@ -54,7 +55,7 @@ public class switchScreen{
 
         //Define layout
         VBox layout1 = new VBox(20);
-        layout1.getChildren().addAll(label1, okButton);
+        layout1.getChildren().addAll(label1, label2, okButton);
 
         scene1 = new Scene(layout1, 700, 600);
 
