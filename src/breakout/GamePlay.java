@@ -254,7 +254,7 @@ public class GamePlay extends Application{
             next_Scene = midScreen.start_Scene();
             window.setScene(next_Scene);
         }
-        if(PLAYER_SCORE == 70 + 50 && myLevel == 3){ //Refactor later
+        if(PLAYER_SCORE == 70 + 110 && myLevel == 3){ //Refactor later
             myLevel=0;
             prevLevel = 3;
             nextLevel = 0; //Can refactor this into a separate function later on.
