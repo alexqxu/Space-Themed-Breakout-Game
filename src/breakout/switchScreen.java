@@ -23,6 +23,9 @@ public class switchScreen{
     int nextLevel;
     int myScore;
 
+    MediaPlayer lossAudioPlayer;
+    MediaPlayer winAudioPlayer;
+
     public void setLevelVals(int pLevel, int nLevel){
         prevLevel = pLevel;
         nextLevel = nLevel;
@@ -139,14 +142,16 @@ public class switchScreen{
 
     private void play_LossAudio(){
         Media media = new Media(new File("resources\\GameLoseSound.mp3").toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
+        lossAudioPlayer = new MediaPlayer(media);
+        lossAudioPlayer.setCycleCount(MediaPlayer.INDEFINITE); //PLAY INDEFINITELY
+        lossAudioPlayer.play();
     }
 
     private void play_WinAudio(){
         Media media = new Media(new File("resources\\winGameEffect.mp3").toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
+        winAudioPlayer = new MediaPlayer(media);
+        winAudioPlayer.setCycleCount(MediaPlayer.INDEFINITE); //PLAY INDEFINITELY
+        winAudioPlayer.play();
     }
 
 }
