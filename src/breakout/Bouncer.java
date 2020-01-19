@@ -1,10 +1,13 @@
 package breakout;
 
+import java.io.File;
 import java.util.Random;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 
 /**
@@ -83,6 +86,7 @@ public class Bouncer {
             } else {
                 myVelocity = new Point2D(myVelocity.getX() + 25, -myVelocity.getY());
             }
+            play_audio();
         }
     }
 
@@ -143,6 +147,12 @@ public class Bouncer {
 
     public void resetSpeed(){ //may not need
         BOUNCER_SPEED = -400;
+    }
+
+    private void play_audio(){
+        Media media = new Media(new File("resources\\pong_beep.wav").toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
     }
 
 
