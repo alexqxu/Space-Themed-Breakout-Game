@@ -8,8 +8,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 public class switchScreen{
 
@@ -94,6 +97,8 @@ public class switchScreen{
 
         Button returnHomeButton = new Button();
         returnHomeButton.setText("Return Home");
+        returnHomeButton.setLayoutX(40);
+        returnHomeButton.setLayoutY(40);
 
         returnHomeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -108,6 +113,7 @@ public class switchScreen{
     }
 
     public Group lose_Screen(){
+        play_LossAudio();
         Group layout = new Group();
 
         Image backgroundImage = new Image(this.getClass().getClassLoader().getResourceAsStream("GameOver700x600.png"));
@@ -115,6 +121,8 @@ public class switchScreen{
 
         Button returnHomeButton = new Button();
         returnHomeButton.setText("Return Home");
+        returnHomeButton.setLayoutX(40);
+        returnHomeButton.setLayoutY(40);
 
         returnHomeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -126,5 +134,11 @@ public class switchScreen{
 
         layout.getChildren().addAll(backgroundView, returnHomeButton);
         return layout;
+    }
+
+    private void play_LossAudio(){
+        Media media = new Media(new File("resources\\GameLoseSound.mp3").toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
     }
 }

@@ -6,10 +6,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -31,9 +29,6 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage) {
         window = primaryStage;
-
-        //Label label1 = new Label("Welcome to BREAKOUT");
-        //Label instructions = new Label("Use arrow keys to move, bounce ball to break bricks to win.");
 
         Button startButton;
         startButton = new Button();
@@ -68,14 +63,6 @@ public class Main extends Application{
         rulesButton.setLayoutX(120);
         rulesButton.setLayoutY(250);
 
-        //Layout, Vertical
-        //VBox layout1 = new VBox(20);
-        //layout1.getChildren().addAll(label1, rulesButton, startButton);
-
-        //Layout 2
-        //VBox layout2 = new VBox(20);
-        //layout2.getChildren().addAll(instructions, backHomeButton);
-
         Group newLayout = new Group();
         Image backgroundImage = new Image(this.getClass().getClassLoader().getResourceAsStream("HomeMenuBackground700x600.png"));
         ImageView backgroundView = new ImageView(backgroundImage);
@@ -86,7 +73,6 @@ public class Main extends Application{
         ImageView rulesView = new ImageView(rulesImage);
         rulesLayout.getChildren().addAll(rulesView, backHomeButton);
 
-        //scene1 = new Scene(layout1, 700, 600);
         scene1 = new Scene(newLayout, 700, 600);
         scene2 = new Scene(rulesLayout, 700, 600);
 
