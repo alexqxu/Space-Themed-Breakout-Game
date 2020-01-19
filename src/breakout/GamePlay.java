@@ -46,6 +46,12 @@ public class GamePlay extends Application{
     public static int PLAYER_SCORE = 0;
     public static int PLAYER_LIVES = 5;
 
+    //ADD CODE THAT SETS SCORE THRESHOLD FOR EACH LEVEL HERE.
+    //level1 and threshold1
+    //level2 and threshold2, or level2 and threshold1+2
+
+    //When you jump to a certain level (OR USE A CHEATCODE), your score will be erased.
+
     // some things needed to remember during game
     private Scene myScene;
     private Scene next_Scene;
@@ -226,9 +232,10 @@ public class GamePlay extends Application{
         //Checks if Game is Over
         if(PLAYER_LIVES <= 0 ){
             PLAYER_LIVES = 5; //Reset player Lives back to original value. Gotta refactor them all
+
             animation.stop();
             switchScreen oneTwo = new switchScreen();
-            oneTwo.setLevelVals(-1,-1);
+            oneTwo.setLevelVals(-1,-1); //magic numbers
             oneTwo.set_Score(PLAYER_SCORE);
             oneTwo.set_Stage(window);
             next_Scene = oneTwo.start_Scene();
@@ -236,7 +243,7 @@ public class GamePlay extends Application{
         }
 
         //Checks if Level is Beat
-        if(PLAYER_SCORE == 60 && myLevel == 1){
+        if(noBricksLeft(myBricks) && myLevel == 1){
             myLevel=2;
             prevLevel = 1;
             nextLevel = 2; //Can refactor this into a separate function later on.
@@ -249,7 +256,7 @@ public class GamePlay extends Application{
             next_Scene = oneTwo.start_Scene();
             window.setScene(next_Scene);
         }
-        if(PLAYER_SCORE == 50 + 60 && myLevel ==2){ //Refactor later
+        else if(noBricksLeft(myBricks) && myLevel ==2){ //Refactor later
             myLevel=3;
             prevLevel = 2;
             nextLevel = 3; //Can refactor this into a separate function later on.
@@ -262,8 +269,8 @@ public class GamePlay extends Application{
             next_Scene = midScreen.start_Scene();
             window.setScene(next_Scene);
         }
-        if(PLAYER_SCORE == 70 + 110 && myLevel == 3){ //Refactor later
-            myLevel=0;
+        else if(noBricksLeft(myBricks) && myLevel == 3){ //Refactor later
+            myLevel=1;
             prevLevel = 3;
             nextLevel = 0; //Can refactor this into a separate function later on.
 
@@ -364,6 +371,61 @@ public class GamePlay extends Application{
                 myBouncers.get(0).setXPos(bouncer1.getXPos() - PADDLE_SPEED);
             }
         }
+        //CHEAT CODES:
+
+        else if(code == KeyCode.L){
+            PLAYER_LIVES++;
+        }
+        else if(code == KeyCode.R){
+            resetPaddle();
+            resetBall(myBouncers.get(0));
+            startClick = false;
+        }
+        else if(code == KeyCode.DIGIT1){
+            myLevel=1;
+            prevLevel = 0;
+            nextLevel = 1; //Can refactor this into a separate function later on.
+
+            animation.stop();
+            switchScreen oneTwo = new switchScreen();
+            oneTwo.setLevelVals(prevLevel,nextLevel);
+            oneTwo.set_Score(PLAYER_SCORE);
+            oneTwo.set_Stage(window);
+            next_Scene = oneTwo.start_Scene();
+            window.setScene(next_Scene);
+        }
+        else if(code == KeyCode.DIGIT2){
+            myLevel=2;
+            prevLevel = 1;
+            nextLevel = 2; //Can refactor this into a separate function later on.
+
+            animation.stop();
+            switchScreen oneTwo = new switchScreen();
+            oneTwo.setLevelVals(prevLevel,nextLevel);
+            oneTwo.set_Score(PLAYER_SCORE);
+            oneTwo.set_Stage(window);
+            next_Scene = oneTwo.start_Scene();
+            window.setScene(next_Scene);
+        }
+        else if(code == KeyCode.DIGIT3){
+            myLevel=3;
+            prevLevel = 2;
+            nextLevel = 3; //Can refactor this into a separate function later on.
+
+            animation.stop();
+            switchScreen midScreen = new switchScreen();
+            midScreen.setLevelVals(prevLevel,nextLevel);
+            midScreen.set_Score(PLAYER_SCORE);
+            midScreen.set_Stage(window);
+            next_Scene = midScreen.start_Scene();
+            window.setScene(next_Scene);
+        }
+        else if(code == KeyCode.P){
+
+        }
+        else if(code == KeyCode.D){
+
+        }
     }
 
     // What to do each time a key is pressed
@@ -432,6 +494,15 @@ public class GamePlay extends Application{
             }
         }
         return score;
+    }
+
+    private boolean noBricksLeft(List<Brick> bricks){
+        for(Brick brick : bricks){
+            if(brick.BRICK_ENABLED){
+                return false;
+            }
+        }
+        return true;
     }
 
     private void calcLives(List<Bouncer> myBouncers) {

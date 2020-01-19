@@ -49,8 +49,14 @@ public class switchScreen{
 
     private Group setUpLayout() {
         Group layout = new Group();
+        Label label1;
 
-        Label label1 = new Label("You beat LEVEL " + prevLevel + "! Move on to LEVEL " + nextLevel + "?");
+        if(nextLevel == 1) {
+            label1 = new Label("Move on to LEVEL " + nextLevel + "?");
+        }
+        else{
+            label1 = new Label("You beat LEVEL " + prevLevel + "! Move on to LEVEL " + nextLevel + "?");
+        }
 
         Label label2 = new Label("Your Current Score Is: " + myScore);
         label2.setLayoutY(50);
