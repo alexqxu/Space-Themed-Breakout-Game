@@ -41,6 +41,9 @@ public class switchScreen{
         else if(nextLevel == 0){
             scene1 = new Scene(finish_Screen(), 700, 600);
         }
+        else{
+            scene1 = new Scene(lose_Screen(), 700, 600);
+        }
         return scene1;
     }
 
@@ -81,6 +84,27 @@ public class switchScreen{
     public Group finish_Screen(){
         Group layout = new Group();
         Image backgroundImage = new Image(this.getClass().getClassLoader().getResourceAsStream("YouWin700x600.png"));
+        ImageView backgroundView = new ImageView(backgroundImage);
+
+        Button returnHomeButton = new Button();
+        returnHomeButton.setText("Return Home");
+
+        returnHomeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Main newGame = new Main();
+                newGame.start(myStage);
+            }
+        });
+
+        layout.getChildren().addAll(backgroundView, returnHomeButton);
+        return layout;
+    }
+
+    public Group lose_Screen(){
+        Group layout = new Group();
+
+        Image backgroundImage = new Image(this.getClass().getClassLoader().getResourceAsStream("GameOver700x600.png"));
         ImageView backgroundView = new ImageView(backgroundImage);
 
         Button returnHomeButton = new Button();

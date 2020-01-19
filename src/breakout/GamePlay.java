@@ -186,11 +186,6 @@ public class GamePlay extends Application{
         return scene;
     }
 
-    private List<Brick> makeBricks (int level) throws Exception {
-        brickLevel brickConfig = new brickLevel();
-        return brickConfig.generate_Bricks(level);
-    }
-
     // Change properties of shapes in small ways to animate them over time
     // Note, there are more sophisticated ways to animate shapes, but these simple ways work fine to start
     private void step (double elapsedTime) {
@@ -212,9 +207,10 @@ public class GamePlay extends Application{
 
         //Checks if the powerups should start dropping.
         for(Brick brick : myBricks){
-            for(powerUp powerup : myPowerUps)
-            if(!brick.BRICK_ENABLED && brick.getXLoc() == powerup.getXPos() && brick.getYLoc() == powerup.getYPos()){
-                powerup.startDrop();
+            for(powerUp powerup : myPowerUps) {
+                if (!brick.BRICK_ENABLED && brick.getXLoc() == powerup.getXPos() && brick.getYLoc() == powerup.getYPos()) {
+                    powerup.startDrop();
+                }
             }
         }
 
@@ -226,6 +222,18 @@ public class GamePlay extends Application{
         calcLives(myBouncers);
         livesValueLabel.setText(""+PLAYER_LIVES);
         resetBallandPaddleifDead(myBouncers);
+
+        //Checks if Game is Over
+        if(PLAYER_LIVES <= 0 ){
+            PLAYER_LIVES = 5; //Reset player Lives back to original value. Gotta refactor them all
+            animation.stop();
+            switchScreen oneTwo = new switchScreen();
+            oneTwo.setLevelVals(-1,-1);
+            oneTwo.set_Score(PLAYER_SCORE);
+            oneTwo.set_Stage(window);
+            next_Scene = oneTwo.start_Scene();
+            window.setScene(next_Scene);
+        }
 
         //Checks if Level is Beat
         if(PLAYER_SCORE == 60 && myLevel == 1){
@@ -366,6 +374,11 @@ public class GamePlay extends Application{
                 startClick = true;
             }
         }
+    }
+
+    private List<Brick> makeBricks (int level) throws Exception {
+        brickLevel brickConfig = new brickLevel();
+        return brickConfig.generate_Bricks(level);
     }
 
     // create given number of bouncer objects with random attributes, but all with the same image
