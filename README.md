@@ -86,7 +86,7 @@ Cheat keys:
 
 * L : Add a life
 * R : Reset ball and paddle to original location
-* 1 - 2 : Jump to a certain level
+* 1 - 3 : Jump to a certain level
 * P : Make Paddle HUGE
 * D : Reduce Health of All Bricks on Screen to ONE
 
