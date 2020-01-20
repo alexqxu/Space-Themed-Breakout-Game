@@ -558,7 +558,7 @@ public class GamePlay extends Application{
 
     private void switchToDialoguePage() {
         animation.stop();
-        switchScreen midScreen = new switchScreen();
+        dialogueScreen midScreen = new dialogueScreen();
         midScreen.setLevelVals(prevLevel,nextLevel);
         midScreen.set_Score(PLAYER_SCORE);
         midScreen.set_Stage(window);
@@ -578,7 +578,7 @@ public class GamePlay extends Application{
         if(isDead()){
             PLAYER_LIVES = allocatedLives;
             animation.stop();
-            switchScreen gameOver = new switchScreen();
+            dialogueScreen gameOver = new dialogueScreen();
             gameOver.setLevelVals(-1,-1);
             gameOver.set_Score(PLAYER_SCORE);
             gameOver.set_Stage(window);
