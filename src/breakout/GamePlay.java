@@ -73,6 +73,10 @@ public class GamePlay extends Application{
     private int levelValueLabelXLocation = 620;
     private int levelValueLabelYLocation = 50;
     private int levelLabelYLocation = 30;
+    private int damagePerHit = 1;
+    private double powerUpBallSizeIncreaseFactor = 1.25;
+    private double powerUpBallSpeedDecreaseFactor = 0.5;
+    private int allocatedLives = 5;
 
     private Group root;
 
@@ -88,6 +92,29 @@ public class GamePlay extends Application{
         stage.setTitle(TITLE);
         stage.show();
         attachGameLoop();
+    }
+
+    /**
+     * Sets the value of the upcoming level.
+     * @param level_val
+     */
+    public void set_Level(int level_val){
+        myLevel = level_val;
+    }
+
+    /**
+     * Sets the score that was earned in previous levels.
+     * @param score
+     */
+    public void set_Score(int score){
+        old_score = score;
+    }
+
+    /**
+     * Start the program.
+     */
+    public static void main (String[] args) {
+        launch(args);
     }
 
     private Scene setupGame (int width, int height) throws Exception {
@@ -106,6 +133,126 @@ public class GamePlay extends Application{
         scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         scene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
         return scene;
+    }
+
+    private void step (double elapsedTime) {
+        if(startClick){
+            removeInstructionalText();
+        }
+        myBall.move(elapsedTime);
+        movePowerups(elapsedTime);
+        startPowerUpDropsIfBrickBroken();
+        refreshScore();
+        refreshLives();
+        launchGameOverIfLivesGone();
+        handleSwitchLevel();
+        handleBallCollisionWithPaddle();
+        handleBounceOffBricks();
+        handleBounceOffWalls();
+        handlePowerUpCollisionWithPaddle();
+        updatePaddleView();
+    }
+
+    /**
+     * Respond according to keys the player presses
+     * @param code
+     */
+
+    private void handleKeyInput (KeyCode code) {
+        if (code == KeyCode.RIGHT && hasSpacetoMoveRight()) {
+            moveBallandPaddleRight();
+        } else if (code == KeyCode.LEFT && hasSpacetoMoveLeft()) {
+            moveBallandPaddleLeft();
+        }
+        else if(code == KeyCode.L){
+            PLAYER_LIVES++;
+        }
+        else if(code == KeyCode.R){
+            handleCheatCodeR();
+        }
+        else if(code == KeyCode.DIGIT1){
+            myLevel=1;
+            prevLevel = 0;
+            nextLevel = 1;
+            switchToDialoguePage();
+        }
+        else if(code == KeyCode.DIGIT2){
+            myLevel=2;
+            prevLevel = 1;
+            nextLevel = 2;
+            switchToDialoguePage();
+        }
+        else if(code == KeyCode.DIGIT3){
+            myLevel=3;
+            prevLevel = 2;
+            nextLevel = 3;
+            switchToDialoguePage();
+        }
+        else if(code == KeyCode.P && startClick){
+            handleCheatCodeP();
+        }
+        else if(code == KeyCode.D){
+            handleCheatCodeD();
+        }
+    }
+
+    /**
+     * When the mouse is clicked, launch the ball in the calculated direction.
+     * @param x coordinate of the click
+     * @param y coordinate of the click
+     */
+    private void handleMouseInput (double x, double y) {
+        if(!startClick) {
+            calculateBallXVelocity(x);
+            myBall.launch();
+            startClick = true;
+        }
+    }
+
+    private void handleCheatCodeD() {
+        for(Brick brick : myBricks){
+            brick.reduceHealthTo1();
+        }
+    }
+
+    private void handleCheatCodeP() {
+        if(longMode) {
+            myPaddle.resetPaddleWidth();
+            longMode = false;
+        }
+        else {
+            myPaddle.setXLoc(0);
+            myPaddle.setMaxPaddleLength();
+            longMode = true;
+        }
+    }
+
+    private void handleCheatCodeR() {
+        myPaddle.resetPaddleToStartingPosition();
+        myPaddle.resetPaddleWidthToOriginal();
+        resetBall(myBall);
+        startClick = false;
+    }
+
+    private void moveBallandPaddleLeft() {
+        myPaddle.moveLeft();
+        if(!startClick){
+            myBall.setXPos(myBall.getXPos() - myPaddle.PADDLE_SPEED);
+        }
+    }
+
+    private void moveBallandPaddleRight() {
+        myPaddle.moveRight();
+        if(!startClick){
+            myBall.setXPos(myBall.getXPos() + myPaddle.PADDLE_SPEED);
+        }
+    }
+
+    private boolean hasSpacetoMoveRight(){
+        return myPaddle.getShape().getX() < myScene.getWidth() - myPaddle.getShape().getWidth() - SIDEPANEL_SIZE;
+    }
+    private boolean hasSpacetoMoveLeft(){
+        return myPaddle.getShape().getX() > 0;
     }
 
     private void addLivesLabels() {
@@ -228,246 +375,6 @@ public class GamePlay extends Application{
         animation.play();
     }
 
-    private void step (double elapsedTime) {
-        //Get rid of instructional text at the start of each level/launching of the ball
-        if(startClick){
-            ClickToBegin.setImage(null);        //Refactor !!
-            UseArrowKeys.setImage(null);
-        }
-
-        myBall.move(elapsedTime);
-
-        for (powerUp powerup : myPowerUps){
-            powerup.move(elapsedTime);
-        }
-
-        //Checks if the powerups should start dropping.
-        for(Brick brick : myBricks){
-            for(powerUp powerup : myPowerUps) {
-                if (!brick.getBrickEnabled() && brick.getXLoc() == powerup.getXPos() && brick.getYLoc() == powerup.getYPos()) {
-                    powerup.startDrop();
-                }
-            }
-        }
-
-        //Calculate Score:
-        PLAYER_SCORE = calcScore(myBricks) + old_score;
-        scoreValueLabel.setText("" + PLAYER_SCORE);
-
-        //Calculate Lives:
-        calcLives();
-        livesValueLabel.setText(""+PLAYER_LIVES);
-        resetBallandPaddleifDead();
-
-        //Checks if Game is Over
-        if(PLAYER_LIVES <= 0 ){
-            PLAYER_LIVES = 5; //Reset player Lives back to original value. Gotta refactor them all
-
-            animation.stop();
-            switchScreen oneTwo = new switchScreen();
-            oneTwo.setLevelVals(-1,-1); //magic numbers
-            oneTwo.set_Score(PLAYER_SCORE);
-            oneTwo.set_Stage(window);
-            next_Scene = oneTwo.start_Scene();
-            window.setScene(next_Scene);
-        }
-
-        //Checks if Level is Beat
-        if(noBricksLeft(myBricks) && myLevel == 1){
-            myLevel=2;
-            prevLevel = 1;
-            nextLevel = 2; //Can refactor this into a separate function later on.
-
-            animation.stop();
-            switchScreen oneTwo = new switchScreen();
-            oneTwo.setLevelVals(prevLevel,nextLevel);
-            oneTwo.set_Score(PLAYER_SCORE);
-            oneTwo.set_Stage(window);
-            next_Scene = oneTwo.start_Scene();
-            window.setScene(next_Scene);
-        }
-        else if(noBricksLeft(myBricks) && myLevel ==2){ //Refactor later
-            myLevel=3;
-            prevLevel = 2;
-            nextLevel = 3; //Can refactor this into a separate function later on.
-
-            animation.stop();
-            switchScreen midScreen = new switchScreen();
-            midScreen.setLevelVals(prevLevel,nextLevel);
-            midScreen.set_Score(PLAYER_SCORE);
-            midScreen.set_Stage(window);
-            next_Scene = midScreen.start_Scene();
-            window.setScene(next_Scene);
-        }
-        else if(noBricksLeft(myBricks) && myLevel == 3){ //Refactor later
-            myLevel=1;
-            prevLevel = 3;
-            nextLevel = 0; //Can refactor this into a separate function later on.
-
-            animation.stop();
-            switchScreen midScreen = new switchScreen();
-            midScreen.setLevelVals(prevLevel,nextLevel);
-            midScreen.set_Score(PLAYER_SCORE);
-            midScreen.set_Stage(window);
-            next_Scene = midScreen.start_Scene();
-            window.setScene(next_Scene);
-        }
-
-        // Check collision with the ball with paddle
-        var hit = false;
-        if (myPaddle.getShape().getBoundsInParent().intersects(myBall.getView().getBoundsInParent())) {
-            myPaddle.highlight();
-            if(myPaddle.getShape().getBoundsInParent().getMinX() + myPaddle.getShape().getWidth()/3 > myBall.getView().getBoundsInParent().getCenterX()){
-                myBall.hitPaddle("left");
-            }
-            else if(myPaddle.getShape().getBoundsInParent().getMaxX() - myPaddle.getShape().getWidth()/3 < myBall.getView().getBoundsInParent().getCenterX()){
-                myBall.hitPaddle("right");
-            }
-            else{
-                myBall.hitPaddle("middle");
-            }
-            hit = true;
-        }
-
-        if (! hit) {
-            myPaddle.resetColor();
-        }
-
-        //Bounce off Bricks
-        for(Brick brick : myBricks) {
-            if (brick.getView().getBoundsInParent().intersects(myBall.getView().getBoundsInParent())) {
-                if (brick.getView().getBoundsInParent().getCenterX() < myBall.getView().getBoundsInParent().getCenterX()) {
-                    myBall.hitBrick("right", brick);
-                } else {
-                    myBall.hitBrick("left", brick);
-                }
-                brick.reduceHealth(1);
-            }
-        }
-
-        // bounce off all the walls
-        myBall.bounce(myScene.getWidth()-SIDEPANEL_SIZE);
-
-        //Powerup collision with paddle
-        for(powerUp powerup : myPowerUps){
-            if (powerup.isEnabled() && myPaddle.getShape().getBoundsInParent().intersects(powerup.getView().getBoundsInParent())){
-                if(powerup.getPowerType().equals("strength")){
-                    myBall.increaseSize(1.25);
-                    powerup.delete();
-                }
-                else if(powerup.getPowerType().equals("time")){
-                    myBall.reduceSpeed(0.5);
-                    powerup.delete();
-                }
-                else if(powerup.getPowerType().equals("length")){
-                    myPaddle.handleIncreaseLengthPowerup();
-                    powerup.delete();
-                }
-                else if(powerup.getPowerType().equals("health")){
-                    PLAYER_LIVES++;
-                    powerup.delete();
-                }
-            }
-        }
-
-        myPaddleView = myPaddle.getShape();
-    }
-
-    private void handleKeyInput (KeyCode code) {
-        if (code == KeyCode.RIGHT && myPaddle.getShape().getX() < myScene.getWidth() - myPaddle.getShape().getWidth() - SIDEPANEL_SIZE) {
-            myPaddle.moveRight();
-            if(!startClick){
-                 myBall.setXPos(myBall.getXPos() + myPaddle.PADDLE_SPEED);
-            }
-        } else if (code == KeyCode.LEFT && myPaddle.getShape().getX() > 0) {
-            myPaddle.moveLeft();
-            if(!startClick){
-                myBall.setXPos(myBall.getXPos() - myPaddle.PADDLE_SPEED);
-            }
-        }
-
-        //CHEAT CODES:
-
-        else if(code == KeyCode.L){
-            PLAYER_LIVES++;
-        }
-        else if(code == KeyCode.R){
-            myPaddle.resetPaddleToStartingPosition();
-            myPaddle.resetPaddleWidthToOriginal();
-
-            resetBall(myBall);
-            startClick = false;
-        }
-        else if(code == KeyCode.DIGIT1){
-            myLevel=1;
-            prevLevel = 0;
-            nextLevel = 1; //Can refactor this into a separate function later on.
-
-            animation.stop();
-            switchScreen oneTwo = new switchScreen();
-            oneTwo.setLevelVals(prevLevel,nextLevel);
-            oneTwo.set_Score(PLAYER_SCORE);
-            oneTwo.set_Stage(window);
-            next_Scene = oneTwo.start_Scene();
-            window.setScene(next_Scene);
-        }
-        else if(code == KeyCode.DIGIT2){
-            myLevel=2;
-            prevLevel = 1;
-            nextLevel = 2; //Can refactor this into a separate function later on.
-
-            animation.stop();
-            switchScreen oneTwo = new switchScreen();
-            oneTwo.setLevelVals(prevLevel,nextLevel);
-            oneTwo.set_Score(PLAYER_SCORE);
-            oneTwo.set_Stage(window);
-            next_Scene = oneTwo.start_Scene();
-            window.setScene(next_Scene);
-        }
-        else if(code == KeyCode.DIGIT3){
-            myLevel=3;
-            prevLevel = 2;
-            nextLevel = 3; //Can refactor this into a separate function later on.
-
-            animation.stop();
-            switchScreen midScreen = new switchScreen();
-            midScreen.setLevelVals(prevLevel,nextLevel);
-            midScreen.set_Score(PLAYER_SCORE);
-            midScreen.set_Stage(window);
-            next_Scene = midScreen.start_Scene();
-            window.setScene(next_Scene);
-        }
-        else if(code == KeyCode.P && startClick){
-            if(longMode) {
-                myPaddle.resetPaddleWidth();
-                longMode = false;
-            }
-            else {
-                myPaddle.setXLoc(0);
-                myPaddle.setMaxPaddleLength();
-                longMode = true;
-            }
-        }
-        else if(code == KeyCode.D){ //Reduce health of bricks to 1.
-            for(Brick brick : myBricks){
-                brick.reduceHealthTo1();
-            }
-        }
-    }
-
-    /**
-     * When the mouse is clicked, launch the ball in the calculated direction.
-     * @param x coordinate of the click
-     * @param y coordinate of the click
-     */
-    private void handleMouseInput (double x, double y) {
-        if(!startClick) {
-            calculateBallXVelocity(x);
-            myBall.launch();
-            startClick = true;
-        }
-    }
-
     private void calculateBallXVelocity(double x) {
         if(x < myBall.getXPos())
             myBall.setInitialXSpeed((int)(x-myBall.getXPos()));
@@ -550,26 +457,169 @@ public class GamePlay extends Application{
         bouncer.resetPosAndVel();
     }
 
-    /**
-     * Sets the value of the upcoming level.
-     * @param level_val
-     */
-    public void set_Level(int level_val){
-        myLevel = level_val;
+    private void handlePowerUpCollisionWithPaddle() {
+        for(powerUp powerup : myPowerUps){
+            if (powerUpHitPaddle(powerup)){
+                if(powerup.getPowerType().equals("strength")){
+                    myBall.increaseSize(powerUpBallSizeIncreaseFactor);
+                }
+                else if(powerup.getPowerType().equals("time")){
+                    myBall.reduceSpeed(powerUpBallSpeedDecreaseFactor);
+                }
+                else if(powerup.getPowerType().equals("length")){
+                    myPaddle.handleIncreaseLengthPowerup();
+                }
+                else if(powerup.getPowerType().equals("health")){
+                    PLAYER_LIVES++;
+                }
+                powerup.delete();
+            }
+        }
     }
 
-    /**
-     * Sets the score that was earned in previous levels.
-     * @param score
-     */
-    public void set_Score(int score){
-        old_score = score;
+    private boolean powerUpHitPaddle(powerUp powerup){
+        return powerup.isEnabled() && myPaddle.getShape().getBoundsInParent().intersects(powerup.getView().getBoundsInParent());
     }
 
-    /**
-     * Start the program.
-     */
-    public static void main (String[] args) {
-        launch(args);
+    private void handleBounceOffWalls() {
+        myBall.bounce(myScene.getWidth()-SIDEPANEL_SIZE);
+    }
+
+    private void handleBounceOffBricks() {
+        for(Brick brick : myBricks) {
+            if (isHitBrick(brick)) {
+                if (isHitBrickRight(brick)) {
+                    myBall.hitBrick("right", brick);
+                } else {
+                    myBall.hitBrick("left", brick);
+                }
+                brick.reduceHealth(damagePerHit);
+            }
+        }
+    }
+
+    private boolean isHitBrick(Brick brick){
+        return brick.getView().getBoundsInParent().intersects(myBall.getView().getBoundsInParent());
+    }
+    private boolean isHitBrickRight(Brick brick){
+        return brick.getView().getBoundsInParent().getCenterX() < myBall.getView().getBoundsInParent().getCenterX();
+    }
+
+    private void handleBallCollisionWithPaddle() {
+        var hit = false;
+        if (isBallHitPaddle()) {
+            myPaddle.highlight();
+            if(isHitPaddleLeft()){
+                myBall.hitPaddle("left");
+            }
+            else if(isHitPaddleRight()){
+                myBall.hitPaddle("right");
+            }
+            else{
+                myBall.hitPaddle("middle");
+            }
+            hit = true;
+        }
+        if (! hit) {
+            myPaddle.resetColor();
+        }
+    }
+
+    private boolean isBallHitPaddle(){
+        return myPaddle.getShape().getBoundsInParent().intersects(myBall.getView().getBoundsInParent());
+    }
+    private boolean isHitPaddleLeft(){
+        return myPaddle.getShape().getBoundsInParent().getMinX() + myPaddle.getShape().getWidth()/3 > myBall.getView().getBoundsInParent().getCenterX();
+    }
+    private boolean isHitPaddleRight(){
+        return myPaddle.getShape().getBoundsInParent().getMaxX() - myPaddle.getShape().getWidth()/3 < myBall.getView().getBoundsInParent().getCenterX();
+    }
+
+    private void handleSwitchLevel() {
+        if(levelBeat(1)){
+            myLevel=2;
+            prevLevel = 1;
+            nextLevel = 2;
+            switchToDialoguePage();
+        }
+        else if(levelBeat(2)){
+            myLevel=3;
+            prevLevel = 2;
+            nextLevel = 3;
+            switchToDialoguePage();
+        }
+        else if(levelBeat(3)){
+            myLevel=1;
+            prevLevel = 3;
+            nextLevel = 0;
+            switchToDialoguePage();
+        }
+    }
+
+    private void switchToDialoguePage() {
+        animation.stop();
+        switchScreen midScreen = new switchScreen();
+        midScreen.setLevelVals(prevLevel,nextLevel);
+        midScreen.set_Score(PLAYER_SCORE);
+        midScreen.set_Stage(window);
+        next_Scene = midScreen.start_Scene();
+        window.setScene(next_Scene);
+    }
+
+    private boolean levelBeat(int level){
+        return noBricksLeft(myBricks) && myLevel == level;
+    }
+
+    private void updatePaddleView(){
+        myPaddleView = myPaddle.getShape();
+    }
+
+    private void launchGameOverIfLivesGone() {
+        if(isDead()){
+            PLAYER_LIVES = allocatedLives;
+            animation.stop();
+            switchScreen gameOver = new switchScreen();
+            gameOver.setLevelVals(-1,-1);
+            gameOver.set_Score(PLAYER_SCORE);
+            gameOver.set_Stage(window);
+            next_Scene = gameOver.start_Scene();
+            window.setScene(next_Scene);
+        }
+    }
+
+    private boolean isDead(){
+        return PLAYER_LIVES <= 0;
+    }
+
+    private void refreshLives() {
+        calcLives();
+        livesValueLabel.setText(""+PLAYER_LIVES);
+        resetBallandPaddleifDead();
+    }
+
+    private void refreshScore() {
+        PLAYER_SCORE = calcScore(myBricks) + old_score;
+        scoreValueLabel.setText("" + PLAYER_SCORE);
+    }
+
+    private void startPowerUpDropsIfBrickBroken() {
+        for(Brick brick : myBricks){
+            for(powerUp powerup : myPowerUps) {
+                if (!brick.getBrickEnabled() && brick.getXLoc() == powerup.getXPos() && brick.getYLoc() == powerup.getYPos()) {
+                    powerup.startDrop();
+                }
+            }
+        }
+    }
+
+    private void movePowerups(double elapsedTime) {
+        for (powerUp powerup : myPowerUps){
+            powerup.move(elapsedTime);
+        }
+    }
+
+    private void removeInstructionalText() {
+        ClickToBegin.setImage(null);
+        UseArrowKeys.setImage(null);
     }
 }
