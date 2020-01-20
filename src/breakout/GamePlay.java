@@ -27,28 +27,22 @@ public class GamePlay extends Application{
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-
     public static final String BOUNCER_IMAGE = "ball.gif";
     public static final String BACKGROUND_IMAGE = "game_Background700x600.png";
-
     public static final String INSTRUCTION_TEXT1 = "UseArrowKeys.gif";
     public static final String INSTRUCTION_TEXT2 = "ClickToBegin.gif";
-
 
     public static int PLAYER_SCORE = 0;
     public static int PLAYER_LIVES = 5;
 
-    // some things needed to remember during game
     private Scene myScene;
     private Scene next_Scene;
     private int old_score;
-    Label scoreValueLabel;
-    Label livesValueLabel;
+    private Label scoreValueLabel;
+    private Label livesValueLabel;
 
     private Stage window;
-
     private Bouncer myBall;
-
     private Paddle myPaddle;
     private Rectangle myPaddleView;
 
@@ -56,19 +50,19 @@ public class GamePlay extends Application{
     private List<powerUp> myPowerUps;
 
     private boolean longMode = false;
-
     private boolean startClick = false;
+
+    private int scoreIncrementValue = 10;
 
     int myLevel = 1;
     int prevLevel;
     int nextLevel;
 
-    KeyFrame frame;
-    Timeline animation;
+    private KeyFrame frame;
+    private Timeline animation;
 
-    //Gifs that play, telling the player what to do.
-    ImageView UseArrowKeys;
-    ImageView ClickToBegin;
+    private ImageView UseArrowKeys;
+    private ImageView ClickToBegin;
 
     /**
      * Initialize what will be displayed and how it will be updated.
@@ -91,6 +85,23 @@ public class GamePlay extends Application{
         animation.getKeyFrames().add(frame);
         animation.play();
     }
+
+    /**
+     * Sets the value of the upcoming level.
+     * @param level_val
+     */
+    public void set_Level(int level_val){
+        myLevel = level_val;
+    }
+
+    /**
+     * Sets the score that was earned in previous levels.
+     * @param score
+     */
+    public void set_Score(int score){
+        old_score = score;
+    }
+
     // Create the game's "scene": what shapes will be in the game and their starting properties
     private Scene setupGame (int width, int height) throws Exception {
         // create one top level collection to organize the things in the scene
@@ -126,6 +137,7 @@ public class GamePlay extends Application{
         //Labels to display player stats
         Label levelLabel = new Label("LEVEL:");
         levelLabel.setLayoutX(620);
+
         levelLabel.setLayoutY(30);
 
         Label levelValueLabel = new Label("" + myLevel);
@@ -410,18 +422,24 @@ public class GamePlay extends Application{
         }
     }
 
-    // What to do each time a key is pressed
+    /**
+     * When the mouse is clicked, launch the ball in the calculated direction.
+     * @param x coordinate of the click
+     * @param y coordinate of the click
+     */
     private void handleMouseInput (double x, double y) {
         if(!startClick) {
-
-            if(x < myBall.getXPos())
-                myBall.setInitialXSpeed((int)(x-myBall.getXPos()));
-            else{
-                myBall.setInitialXSpeed((int)-(myBall.getXPos() - x));
-            }
-            
+            calculateBallXVelocity(x);
             myBall.launch();
             startClick = true;
+        }
+    }
+
+    private void calculateBallXVelocity(double x) {
+        if(x < myBall.getXPos())
+            myBall.setInitialXSpeed((int)(x-myBall.getXPos()));
+        else{
+            myBall.setInitialXSpeed((int)-(myBall.getXPos() - x));
         }
     }
 
@@ -459,21 +477,11 @@ public class GamePlay extends Application{
         return result;
     }
 
-    public void set_Level(int level_val){
-        myLevel = level_val;
-    }
-
-    public void set_Score(int score){
-        old_score = score;
-    }
-
-    public Stage return_Stage(){return window;}
-
     private int calcScore(List<Brick> list){
         int score = 0;
         for(int i = 0; i<list.size(); i++){
             if(!list.get(i).getBrickEnabled()){
-                score += 10;
+                score += scoreIncrementValue;
             }
         }
         return score;
