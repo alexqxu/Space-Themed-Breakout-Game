@@ -27,6 +27,8 @@ public class mainMenu extends Application{
     private final int numberInitialLives = 5;
     private final int windowWidth = 700;
     private final int windowHeight = 600;
+    private final int startingScore = 0;
+    private final int startingLevel = 1;
 
     private final String windowTitle = "Breakout Game";
     private final String HomeMenuBackground = "HomeMenuBackground700x600.png";
@@ -108,8 +110,8 @@ public class mainMenu extends Application{
                 stopBackGroundAudio();
                 GamePlay gameView = new GamePlay();
                 try {
-                    gameView.set_Level(1);
-                    gameView.set_Score(0);
+                    gameView.set_Level(startingLevel);
+                    gameView.set_Score(startingScore);
                     gameView.PLAYER_LIVES = numberInitialLives;
                     gameView.start(window);
                 } catch (Exception e) {

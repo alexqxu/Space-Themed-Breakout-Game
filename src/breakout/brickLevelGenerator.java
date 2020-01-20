@@ -5,22 +5,32 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Imports the text files used to configure the bricks in each level.
+ * @author Alex Xu
+ */
 public class brickLevelGenerator {
 
     public static final String LEVEL_1_FILENAME = "resources\\Level_1.txt";
     public static final String LEVEL_2_FILENAME = "resources\\Level_2.txt";
     public static final String LEVEL_3_FILENAME = "resources\\Level_3.txt";
 
-    public void get_Values(){ //Refactor Later
-    }
+    private int startingXLocation = 0;
+    private int startingYLocation = 0;
 
-    public static String readFileAsString(int val)throws Exception
+    /**
+     * Reads text files and returns a string of the characters in the file
+     * @param level the level desired
+     * @return
+     * @throws Exception
+     */
+    public static String readFileAsString(int level)throws Exception
     {
         String level_val;
-        if(val == 1){
+        if(level == 1){
             level_val = LEVEL_1_FILENAME;
         }
-        else if (val==2){
+        else if (level==2){
             level_val = LEVEL_2_FILENAME;
         }
         else{
@@ -31,48 +41,44 @@ public class brickLevelGenerator {
         return data;
     }
 
+    /**
+     * Generates bricks according to the information inputted
+     * @param level_val level desired
+     * @return a List of Bricks
+     */
     public List<Brick> generate_Bricks(int level_val) throws Exception {
         String file = readFileAsString(level_val);
         String[] data = file.split(" ");
-
-        int xLoc = 0;
-        int yLoc = 0;
-
         List<Brick> result = new ArrayList<>();
-
         for(String d : data){
             int brickValue = Integer.parseInt(d.trim());
-
             if(brickValue >= 10) {
-                if (brickValue % 10 == 1) {                              //MIGHT CHANGE THIS LATER TO CHECK LETTERS, TO MAKE DESIGNING LEVELS MORE INTUITIVE.
-                    Brick b = new Brick(brickValue / 10, xLoc, yLoc, "strength");
-                    result.add(b);
+                Brick b;
+                if (brickValue % 10 == 1) {
+                    b = new Brick(brickValue / 10, startingXLocation, startingYLocation, "strength");
                 } else if (brickValue % 10 == 2) {
-                    Brick b = new Brick(brickValue / 10, xLoc, yLoc, "time");
-                    result.add(b);
+                    b = new Brick(brickValue / 10, startingXLocation, startingYLocation, "time");
                 } else if (brickValue % 10 == 3) {
-                    Brick b = new Brick(brickValue / 10, xLoc, yLoc, "length");
-                    result.add(b);
-                } else if (brickValue % 10 == 4) {
-                    Brick b = new Brick(brickValue / 10, xLoc, yLoc, "health");
-                    result.add(b);
+                    b = new Brick(brickValue / 10, startingXLocation, startingYLocation, "length");
+                } else{
+                    b = new Brick(brickValue / 10, startingXLocation, startingYLocation, "health");
                 }
-            }
-
-            else if(brickValue != 0) {
-                Brick b = new Brick(brickValue, xLoc, yLoc, "none");
                 result.add(b);
             }
-
-            xLoc += 100;
-
-            if (xLoc == 600) {
-                xLoc = 0;
-                yLoc += 40;
+            else if(brickValue != 0) {
+                Brick b = new Brick(brickValue, startingXLocation, startingYLocation, "none");
+                result.add(b);
             }
+            refreshRenderLocation();
         }
-
         return result;
     }
 
+    private void refreshRenderLocation() {
+        startingXLocation += 100;
+        if (startingXLocation == 600) {
+            startingXLocation = 0;
+            startingYLocation += 40;
+        }
+    }
 }

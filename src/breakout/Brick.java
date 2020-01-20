@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 
 /**
  * The Brick class is responsible for storing and handling information for each brick object.
+ * @author Alex Xu
  */
 public class Brick {
     private int brickHealth;

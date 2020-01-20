@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Test of Game
+ * Main Class that holds game elements and calculates interactions between them.
+ * @author Alex Xu
  */
 
 public class GamePlay extends Application{
