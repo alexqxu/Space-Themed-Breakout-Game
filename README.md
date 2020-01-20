@@ -118,6 +118,7 @@ by power up (slightly bigger). I have implemented these features.
 
 * Text file input format is as follows:
     * Every number must be separated by a space, and in one single line.
+    * 0 represents empty space
     * The first digit of the number (1-3) represents the health of that brick
     * The second digit (1-4) represents the power up.
         * 1: Strength - Ball size increases
