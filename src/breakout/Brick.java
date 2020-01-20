@@ -4,95 +4,137 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * The Brick class is responsible for storing and handling information for each brick object.
+ */
 public class Brick {
-    public int BRICK_HEALTH;
-    public boolean BRICK_ENABLED = true;
+    private int brickHealth;
+    private boolean brickEnabled = true;
 
     private final String BRICK1_IMAGE = "brickh1.png";
     private final String BRICK2_IMAGE = "brickh2.png";
     private final String BRICK3_IMAGE = "brickh3.png";
 
-    Image brick1Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK1_IMAGE));
-    Image brick2Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK2_IMAGE));
-    Image brick3Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK3_IMAGE));
+    private Image brick1Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK1_IMAGE));
+    private Image brick2Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK2_IMAGE));
+    private Image brick3Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK3_IMAGE));
 
-    Image image;
+    private Image myBrickImage;
+    private ImageView myBrickView;
 
-    private ImageView myView;
+    private String PowerUp;
 
-    String PowerUp;
+    private int myXLocation;
+    private int myYLocation;
 
-    int myXLoc;
-    int myYLoc;
+    private final int horizontalSize = 75;
+    private final int verticalSize = 30;
 
-    public Brick(int health, int locX, int locY, String PowerUpType){
-        PowerUp = PowerUpType;      //Has to be first line because set_skin references it.
+    /**
+     * Brick constructor that takes a health value, x location, y location, and a powerup type.
+     * @param health how many hit points the brick has
+     * @param locationX x Location
+     * @param locationY y Location
+     * @param PowerUpType type of powerup the brick is associated with
+     */
+    public Brick(int health, int locationX, int locationY, String PowerUpType){
+        PowerUp = PowerUpType;
+        brickHealth = health;
         set_Skin(health);
-        myView = new ImageView(image);
-
-        int horizontalSize = 75;
-        int verticalSize = 30;
-        myView.setFitWidth(horizontalSize);
-        myView.setFitHeight(verticalSize);
-
-        myView.setX(locX);
-        myView.setY(locY);
-
-        myXLoc = locX;
-        myYLoc = locY;
-
-        BRICK_HEALTH = health;
+        myBrickView = new ImageView(myBrickImage);
+        adjustBrickSize();
+        adjustBrickLocation(locationX, locationY);
     }
 
+    /**
+     * Reduces the health of the brick
+     * @param value to reduce the health of the brick by
+     */
     public void reduceHealth(int value){
-        if(BRICK_ENABLED) {
-            BRICK_HEALTH = BRICK_HEALTH - value;
-
-            set_Skin(BRICK_HEALTH);
-            myView.setImage(image);
-
-            if (BRICK_HEALTH <= 0) {
-                myView.setImage(null);
-                BRICK_ENABLED = false;
+        if(brickEnabled) {
+            brickHealth = brickHealth - value;
+            updateSkin();
+            if (brickHealth <= 0) {
+                disableBrick();
             }
         }
     }
 
+    /**
+     * Reduce the health of the brick to 1, regardless of original health.
+     * Used for cheat code D.
+     */
     public void reduceHealthTo1(){
-        if(BRICK_ENABLED){
-            BRICK_HEALTH = 1;
-            set_Skin(BRICK_HEALTH);
-            myView.setImage(image);
+        if(brickEnabled){
+            brickHealth = 1;
+            updateSkin();
         }
-    }
-
-    public void set_Skin(int health){
-        if(health == 1){
-            image = brick1Image;
-        }
-        else if (health == 2){
-            image = brick2Image;
-        }
-        else{
-            image = brick3Image;
-        }
-    }
-
-    public String getPowerUp(){
-        return PowerUp;
-    }
-
-    public int getXLoc(){
-        return myXLoc;
-    }
-    public int getYLoc(){
-        return myYLoc;
     }
 
     /**
      * Internal View of Brick
      */
     public Node getView () {
-        return myView;
+        return myBrickView;
+    }
+
+    /**
+     * @return powerup value
+     */
+    public String getPowerUp(){
+        return PowerUp;
+    }
+
+    /**
+     * @return if the brick is enabled or not
+     */
+    public boolean getBrickEnabled(){return brickEnabled;}
+
+    /**
+     * @return x location of brick
+     */
+    public int getXLoc(){
+        return myXLocation;
+    }
+
+    /**
+     * @return y location of brick
+     */
+    public int getYLoc(){
+        return myYLocation;
+    }
+
+    private void set_Skin(int health){
+        if(health == 1){
+            myBrickImage = brick1Image;
+        }
+        else if (health == 2){
+            myBrickImage = brick2Image;
+        }
+        else{
+            myBrickImage = brick3Image;
+        }
+    }
+
+    private void disableBrick() {
+        myBrickView.setImage(null);
+        brickEnabled = false;
+    }
+
+    private void updateSkin() {
+        set_Skin(brickHealth);
+        myBrickView.setImage(myBrickImage);
+    }
+
+    private void adjustBrickLocation(int locX, int locY) {
+        myXLocation = locX;
+        myYLocation = locY;
+        myBrickView.setX(locX);
+        myBrickView.setY(locY);
+    }
+
+    private void adjustBrickSize() {
+        myBrickView.setFitWidth(horizontalSize);
+        myBrickView.setFitHeight(verticalSize);
     }
 }

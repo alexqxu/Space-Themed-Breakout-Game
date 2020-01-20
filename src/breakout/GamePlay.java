@@ -200,7 +200,7 @@ public class GamePlay extends Application{
         //Checks if the powerups should start dropping.
         for(Brick brick : myBricks){
             for(powerUp powerup : myPowerUps) {
-                if (!brick.BRICK_ENABLED && brick.getXLoc() == powerup.getXPos() && brick.getYLoc() == powerup.getYPos()) {
+                if (!brick.getBrickEnabled() && brick.getXLoc() == powerup.getXPos() && brick.getYLoc() == powerup.getYPos()) {
                     powerup.startDrop();
                 }
             }
@@ -468,7 +468,7 @@ public class GamePlay extends Application{
     private int calcScore(List<Brick> list){
         int score = 0;
         for(int i = 0; i<list.size(); i++){
-            if(!list.get(i).BRICK_ENABLED){
+            if(!list.get(i).getBrickEnabled()){
                 score += 10;
             }
         }
@@ -477,7 +477,7 @@ public class GamePlay extends Application{
 
     private boolean noBricksLeft(List<Brick> bricks){
         for(Brick brick : bricks){
-            if(brick.BRICK_ENABLED){
+            if(brick.getBrickEnabled()){
                 return false;
             }
         }

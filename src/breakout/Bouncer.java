@@ -13,7 +13,7 @@ import javafx.scene.media.MediaPlayer;
  * @author: Alex Xu
  */
 public class Bouncer {
-    public final int BOUNCER_SIZE = 25;
+    private final int BOUNCER_SIZE = 25;
     private int initialBouncerSpeed = -400;
     private final int YdistanceAwayFromCenter = 225;
     private final int paddleCausedAcceleration = 30;
@@ -80,7 +80,7 @@ public class Bouncer {
      * @param b the brick that the ball has hit.
      */
     public void hitBrick(String side, Brick b){
-        if(b.BRICK_ENABLED) {
+        if(b.getBrickEnabled()) {
             if (side.equals("left")) {
                 myVelocity = new Point2D(myVelocity.getX() - brickCausedAcceleration, -myVelocity.getY());
             } else {
