@@ -110,7 +110,7 @@ decide where to place power-ups, instead of random generation. This makes design
 ### Notes/Assumptions
 
 * Assumed that "three different kinds of bricks" can mean that there are bricks that are destroyed after
-one hit (regular), destroyed after multiple hits, and drop power ups. I have implemented these threee.
+one hit (regular), destroyed after multiple hits, and drop power ups. I have implemented these three.
 
 * Assumed that three different paddle abilities can include that the ball bounces differently depending on which third
 of the paddle it lands on, reset to original location via cheat code, change size by cheat code (super big), or change size
