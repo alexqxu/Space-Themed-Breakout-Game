@@ -11,7 +11,7 @@ Start Date: 1/10/20
 
 Finish Date: 1/19/20
 
-Hours Spent: 32
+Hours Spent: 38
 
 ### Resources Used
 
