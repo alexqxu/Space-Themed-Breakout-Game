@@ -74,7 +74,6 @@ public class switchScreen{
         okButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //PUT ACTION HERE
                 GamePlay nextGame = new GamePlay();
                 nextGame.set_Level(nextLevel);
                 nextGame.set_Score(myScore);
@@ -107,6 +106,7 @@ public class switchScreen{
         returnHomeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                winAudioPlayer.stop();
                 Main newGame = new Main();
                 newGame.start(myStage);
             }
@@ -131,6 +131,7 @@ public class switchScreen{
         returnHomeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                lossAudioPlayer.stop();
                 Main newGame = new Main();
                 newGame.start(myStage);
             }

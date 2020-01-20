@@ -122,12 +122,6 @@ public class GamePlay extends Application{
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
         myBall = makeBall(image, width, height);
 
-        //myBouncers = makeBouncers(NUM_BOUNCERS, image, width, height);
-
-        //myBouncers.get(0).resetSpeed();                  //take out and dont need                                                               /////////////////REFACTOR THIS LATER//////////////
-        //bouncer1 = myBouncers.get(0);
-        /////////////////////////
-
         myPaddle = new Paddle(SIZE + 100, SIZE); //magic number
         myPaddle.resetPaddleWidthToOriginal();
         myPaddleView = myPaddle.getShape();
@@ -168,10 +162,6 @@ public class GamePlay extends Application{
 
         root.getChildren().add(myPaddleView);
 
-        //for (Bouncer b : myBouncers) {
-        //    root.getChildren().add(b.getView());
-        //}
-
         root.getChildren().add(myBall.getView());
 
         for (Brick brick : myBricks) {
@@ -203,11 +193,6 @@ public class GamePlay extends Application{
             ClickToBegin.setImage(null);        //Refactor !!
             UseArrowKeys.setImage(null);
         }
-
-        // update "actors" attributes
-        //for (Bouncer b : myBouncers) {
-        //    b.move(elapsedTime);
-        //}
 
         myBall.move(elapsedTime);
 
@@ -359,7 +344,6 @@ public class GamePlay extends Application{
             myPaddle.moveLeft();
             if(!startClick){
                 myBall.setXPos(myBall.getXPos() - myPaddle.PADDLE_SPEED);
-                myBall.setXPos(myBall.getXPos() - myPaddle.PADDLE_SPEED);
             }
         }
 
@@ -445,23 +429,9 @@ public class GamePlay extends Application{
         return brickConfig.generate_Bricks(level);
     }
 
-    /*
-    // create given number of bouncer objects with random attributes, but all with the same image
-    private List<Bouncer> makeBouncers (int maxBouncers, Image image, int width, int height) {
-        List<Bouncer> result = new ArrayList<>();
-        for (int k = 0; k < maxBouncers; k++) {
-            Bouncer b = new Bouncer(image, width, height);
-            result.add(b);
-        }
-        return result;
-    }
-
-     */
-
     private Bouncer makeBall(Image image, int width, int height){
         return new Bouncer(image, width, height);
     }
-
 
     private List<powerUp> makePowerUps (List<Brick> brickList){
         List<powerUp> result = new ArrayList<>();
@@ -491,9 +461,11 @@ public class GamePlay extends Application{
     public void set_Level(int level_val){
         myLevel = level_val;
     }
+
     public void set_Score(int score){
         old_score = score;
     }
+
     public Stage return_Stage(){return window;}
 
     private int calcScore(List<Brick> list){
@@ -515,16 +487,6 @@ public class GamePlay extends Application{
         return true;
     }
 
-    /*
-    private void calcLives(List<Bouncer> myBouncers) {
-        for(Bouncer b : myBouncers){
-            if (b.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()){
-                PLAYER_LIVES--;
-            }
-        }
-    }
-
-     */
     private void calcLives(){
         if(myBall.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()){
             PLAYER_LIVES--;
@@ -549,7 +511,7 @@ public class GamePlay extends Application{
     }
 
     private void resetBall(Bouncer bouncer){
-        bouncer.resetPosandVel();
+        bouncer.resetPosAndVel();
     }
 
     /**
