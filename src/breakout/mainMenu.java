@@ -16,6 +16,7 @@ import java.io.File;
 
 /**
  * This class serves as the Menu screen of the game.
+ * @author Alex Xu
  */
 public class mainMenu extends Application{
     private static final int startButtonXLocation = 120;
@@ -104,19 +105,16 @@ public class mainMenu extends Application{
     }
 
     private void setStartButtonAction() {
-        startButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stopBackGroundAudio();
-                GamePlay gameView = new GamePlay();
-                try {
-                    gameView.set_Level(startingLevel);
-                    gameView.set_Score(startingScore);
-                    gameView.PLAYER_LIVES = numberInitialLives;
-                    gameView.start(window);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        startButton.setOnAction(event -> {
+            stopBackGroundAudio();
+            GamePlay gameView = new GamePlay();
+            try {
+                gameView.set_Level(startingLevel);
+                gameView.set_Score(startingScore);
+                gameView.PLAYER_LIVES = numberInitialLives;
+                gameView.start(window);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
