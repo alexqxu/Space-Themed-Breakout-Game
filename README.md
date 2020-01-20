@@ -120,6 +120,10 @@ by power up (slightly bigger). I have implemented these features.
     * Every number must be separated by a space, and in one single line.
     * The first digit of the number (1-3) represents the health of that brick
     * The second digit (1-4) represents the power up.
+        * 1: Strength - Ball size increases
+        * 2: Time - Ball slows down
+        * 3: Length - Paddle length increases
+        * 4: Health - Add a life
     * The game automatically reads the file and lays the bricks. There are six bricks per row and this
     process is automatic.
 
