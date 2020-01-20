@@ -37,7 +37,6 @@ public class GamePlay extends Application{
     public static final String INSTRUCTION_TEXT1 = "UseArrowKeys.gif";
     public static final String INSTRUCTION_TEXT2 = "ClickToBegin.gif";
 
-    //public static final int NUM_BOUNCERS = 1;
 
     public static int PLAYER_SCORE = 0;
     public static int PLAYER_LIVES = 5;
@@ -51,8 +50,6 @@ public class GamePlay extends Application{
 
     private Stage window;
 
-    //private List<Bouncer> myBouncers;
-    //private Bouncer bouncer1;
     private Bouncer myBall;
 
     private Paddle myPaddle;

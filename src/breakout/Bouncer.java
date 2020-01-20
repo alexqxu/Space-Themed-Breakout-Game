@@ -8,7 +8,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-
 /**
  * The bouncer class is used to make the ball that bounces around.
  * @author: Alex Xu
@@ -185,10 +184,6 @@ public class Bouncer {
         myView.setFitWidth(size);
         myView.setFitHeight(size);
     }
-
-    private void resetSpeed(){ //may not need
-        initialBouncerSpeed = -400;
-    } //may take out.
 
     private void play_audio(){
         Media media = new Media(new File("resources\\pong_beep.wav").toURI().toString());

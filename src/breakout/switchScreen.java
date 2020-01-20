@@ -107,7 +107,7 @@ public class switchScreen{
             @Override
             public void handle(ActionEvent event) {
                 winAudioPlayer.stop();
-                Main newGame = new Main();
+                mainMenu newGame = new mainMenu();
                 newGame.start(myStage);
             }
         });
@@ -132,7 +132,7 @@ public class switchScreen{
             @Override
             public void handle(ActionEvent event) {
                 lossAudioPlayer.stop();
-                Main newGame = new Main();
+                mainMenu newGame = new mainMenu();
                 newGame.start(myStage);
             }
         });
