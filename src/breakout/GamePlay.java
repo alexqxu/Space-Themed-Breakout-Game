@@ -9,8 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -25,11 +23,10 @@ import java.util.List;
 public class GamePlay extends Application{
     public static final String TITLE = "Breakout Game";
     public static final int SIZE = 600;
+    public static final int SIDEPANEL_SIZE = 100;
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-
-    public static final Paint BACKGROUND = Color.AZURE;
 
     public static final String BOUNCER_IMAGE = "ball.gif";
     public static final String BACKGROUND_IMAGE = "game_Background700x600.png";
@@ -82,7 +79,7 @@ public class GamePlay extends Application{
         window = stage;
         window.setResizable(false); //Implement for menus as well
 
-        myScene = setupGame(SIZE+100, SIZE, BACKGROUND);
+        myScene = setupGame(SIZE+ SIDEPANEL_SIZE, SIZE);
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
@@ -95,7 +92,7 @@ public class GamePlay extends Application{
         animation.play();
     }
     // Create the game's "scene": what shapes will be in the game and their starting properties
-    private Scene setupGame (int width, int height, Paint background) throws Exception {
+    private Scene setupGame (int width, int height) throws Exception {
         // create one top level collection to organize the things in the scene
         Group root = new Group();
 
@@ -119,7 +116,7 @@ public class GamePlay extends Application{
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
         myBall = makeBall(image, width, height);
 
-        myPaddle = new Paddle(SIZE + 100, SIZE); //magic number
+        myPaddle = new Paddle(SIZE + SIDEPANEL_SIZE, SIZE);
         myPaddle.resetPaddleWidthToOriginal();
         myPaddleView = myPaddle.getShape();
 
@@ -174,7 +171,7 @@ public class GamePlay extends Application{
         root.getChildren().add(ClickToBegin);
 
         // create a place to see the shapes
-        Scene scene = new Scene(root, width, height, background);
+        Scene scene = new Scene(root, width, height);
 
         // respond to input
         scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
@@ -302,7 +299,7 @@ public class GamePlay extends Application{
         }
 
         // bounce off all the walls
-        myBall.bounce(myScene.getWidth()-100);
+        myBall.bounce(myScene.getWidth()-SIDEPANEL_SIZE);
 
         //Powerup collision with paddle
         for(powerUp powerup : myPowerUps){
@@ -332,7 +329,7 @@ public class GamePlay extends Application{
     // What to do each time a key is pressed
     private void handleKeyInput (KeyCode code) {
 
-        if (code == KeyCode.RIGHT && myPaddle.getShape().getX() < myScene.getWidth() - myPaddle.getShape().getWidth() - 100) {
+        if (code == KeyCode.RIGHT && myPaddle.getShape().getX() < myScene.getWidth() - myPaddle.getShape().getWidth() - SIDEPANEL_SIZE) {
             myPaddle.moveRight();
             if(!startClick){
                  myBall.setXPos(myBall.getXPos() + myPaddle.PADDLE_SPEED);
@@ -416,6 +413,13 @@ public class GamePlay extends Application{
     // What to do each time a key is pressed
     private void handleMouseInput (double x, double y) {
         if(!startClick) {
+
+            if(x < myBall.getXPos())
+                myBall.setInitialXSpeed((int)(x-myBall.getXPos()));
+            else{
+                myBall.setInitialXSpeed((int)-(myBall.getXPos() - x));
+            }
+            
             myBall.launch();
             startClick = true;
         }

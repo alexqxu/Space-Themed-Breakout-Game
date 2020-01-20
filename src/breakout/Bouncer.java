@@ -18,7 +18,7 @@ public class Bouncer {
     private final int YdistanceAwayFromCenter = 225;
     private final int paddleCausedAcceleration = 30;
     private final int brickCausedAcceleration = 25;
-    private final int initialXSpeed=200;
+    private int initialXSpeed;
     private ImageView myView;
     private Point2D myVelocity;
 
@@ -155,7 +155,11 @@ public class Bouncer {
     public void reduceSpeed(double reductionFactor){
         myVelocity = new Point2D(myVelocity.getX() * reductionFactor, myVelocity.getY()*reductionFactor);
         initialBouncerSpeed = (int)(initialBouncerSpeed *reductionFactor);
-}
+    }
+
+    public void setInitialXSpeed(int speed){
+        initialXSpeed = speed;
+    }
 
     private void setInitialXPos(int xPosition){
         initialXPos = xPosition;
