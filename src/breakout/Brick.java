@@ -4,14 +4,13 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-
 public class Brick {
     public int BRICK_HEALTH;
     public boolean BRICK_ENABLED = true;
 
-    private static final String BRICK1_IMAGE = "brickh1.png";
-    private static final String BRICK2_IMAGE = "brickh2.png";
-    private static final String BRICK3_IMAGE = "brickh3.png";
+    private final String BRICK1_IMAGE = "brickh1.png";
+    private final String BRICK2_IMAGE = "brickh2.png";
+    private final String BRICK3_IMAGE = "brickh3.png";
 
     Image brick1Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK1_IMAGE));
     Image brick2Image = new Image(this.getClass().getClassLoader().getResourceAsStream(BRICK2_IMAGE));

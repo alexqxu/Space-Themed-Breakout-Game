@@ -9,16 +9,16 @@ Name: Alex Xu (aqx)
 
 Start Date: 1/10/20
 
-Finish Date: 
+Finish Date: 1/19/20
 
-Hours Spent:
+Hours Spent: 32
 
 ### Resources Used
 
 
 ### Running the Program
 
-Main class:
+Main class: mainMenu.java
 
 Data files needed: 
 
@@ -35,4 +35,3 @@ Extra credit:
 
 
 ### Impressions
-

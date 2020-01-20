@@ -13,7 +13,7 @@ import javafx.scene.media.MediaPlayer;
  * @author: Alex Xu
  */
 public class Bouncer {
-    public static final int BOUNCER_SIZE = 25;
+    public final int BOUNCER_SIZE = 25;
     private int initialBouncerSpeed = -400;
     private final int YdistanceAwayFromCenter = 225;
     private final int paddleCausedAcceleration = 30;
