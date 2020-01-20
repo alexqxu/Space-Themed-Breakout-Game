@@ -63,22 +63,164 @@ public class GamePlay extends Application{
 
     private ImageView UseArrowKeys;
     private ImageView ClickToBegin;
+    private int instructionalTextXAdjustment = 50;
+    private int livesValueLabelXLocation = 620;
+    private int livesValueLabelYLocation = 150;
+    private int livesLabelYLocation = 130;
+    private int scoreValueLabelXLocation = 620;
+    private int scoreValueLabelYLocation = 100;
+    private int scoreLabelYLocation = 80;
+    private int levelValueLabelXLocation = 620;
+    private int levelValueLabelYLocation = 50;
+    private int levelLabelYLocation = 30;
+
+    private Group root;
 
     /**
      * Initialize what will be displayed and how it will be updated.
      */
     @Override
     public void start (Stage stage) throws Exception {
-        // attach scene to the stage and display it
         window = stage;
-        window.setResizable(false); //Implement for menus as well
-
+        window.setResizable(false);
         myScene = setupGame(SIZE+ SIDEPANEL_SIZE, SIZE);
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
+        attachGameLoop();
+    }
 
-        // attach "game loop" to timeline to play it (basically just calling step() method repeatedly forever)\
+    private Scene setupGame (int width, int height) throws Exception {
+        root = new Group();
+        addBackGroundImagetoGroup();
+        addBalltoGroup(width, height);
+        addPaddletoGroup();
+        addBrickstoGroup();
+        addPowerUpstoGroup();
+        addLevelLabels();
+        addScoreLabels();
+        addLivesLabels();
+        addInstructionalTexttoGroup(width, height);
+
+        Scene scene = new Scene(root, width, height);
+        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+        scene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
+        return scene;
+    }
+
+    private void addLivesLabels() {
+        addStaticLivesLabel();
+        addDynamicLivesLabel();
+    }
+
+    private void addDynamicLivesLabel() {
+        livesValueLabel = new Label(""+ PLAYER_LIVES);
+        livesValueLabel.setLayoutX(livesValueLabelXLocation);
+        livesValueLabel.setLayoutY(livesValueLabelYLocation);
+        root.getChildren().add(livesValueLabel);
+    }
+
+    private void addStaticLivesLabel() {
+        Label livesLabel = new Label("LIVES LEFT: ");
+        livesLabel.setLayoutX(livesValueLabelXLocation);
+        livesLabel.setLayoutY(livesLabelYLocation);
+        root.getChildren().add(livesLabel);
+    }
+
+    private void addScoreLabels() {
+        addStaticScoreLabel();
+        addDyanmicScoreLabel();
+    }
+
+    private void addDyanmicScoreLabel() {
+        scoreValueLabel = new Label("" + PLAYER_SCORE);
+        scoreValueLabel.setLayoutX(scoreValueLabelXLocation);
+        scoreValueLabel.setLayoutY(scoreValueLabelYLocation);
+        root.getChildren().add(scoreValueLabel);
+    }
+
+    private void addStaticScoreLabel() {
+        Label scoreLabel = new Label("SCORE:");
+        scoreLabel.setLayoutX(scoreValueLabelXLocation);
+        scoreLabel.setLayoutY(scoreLabelYLocation);
+        root.getChildren().add(scoreLabel);
+    }
+
+    private void addLevelLabels() {
+        addStaticLevelLabel();
+        addDynamicLevelLabel();
+    }
+
+    private void addDynamicLevelLabel() {
+        Label levelValueLabel = new Label("" + myLevel);
+        levelValueLabel.setLayoutX(levelValueLabelXLocation);
+        levelValueLabel.setLayoutY(levelValueLabelYLocation);
+        root.getChildren().add(levelValueLabel);
+    }
+
+    private void addStaticLevelLabel() {
+        Label levelLabel = new Label("LEVEL:");
+        levelLabel.setLayoutX(levelValueLabelXLocation);
+        levelLabel.setLayoutY(levelLabelYLocation);
+        root.getChildren().add(levelLabel);
+    }
+
+    private void addPowerUpstoGroup() {
+        myPowerUps = makePowerUps(myBricks);
+        for (powerUp pu : myPowerUps){
+            root.getChildren().add(pu.getView());
+        }
+    }
+
+    private void addBrickstoGroup() throws Exception {
+        myBricks = makeBricks(myLevel);
+        for (Brick brick : myBricks) {
+            root.getChildren().add(brick.getView());
+        }
+    }
+
+    private void addPaddletoGroup() {
+        myPaddle = new Paddle(SIZE + SIDEPANEL_SIZE, SIZE);
+        myPaddle.resetPaddleWidthToOriginal();
+        myPaddleView = myPaddle.getShape();
+        root.getChildren().add(myPaddleView);
+    }
+
+    private void addBalltoGroup(int width, int height) {
+        Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
+        myBall = makeBall(image, width, height);
+        root.getChildren().add(myBall.getView());
+    }
+
+    private void addInstructionalTexttoGroup(int width, int height) {
+        addUseArrowKeys(width, height);
+        addClicktoBegin(width, height);
+    }
+
+    private void addUseArrowKeys(int width, int height){
+        Image instruction1 = new Image(this.getClass().getClassLoader().getResourceAsStream(INSTRUCTION_TEXT1));
+        UseArrowKeys = new ImageView(instruction1);
+        UseArrowKeys.setLayoutX(width/2 - instructionalTextXAdjustment - instruction1.getWidth()/2);
+        UseArrowKeys.setLayoutY(height/2 - instruction1.getHeight());
+        root.getChildren().add(UseArrowKeys);
+    }
+
+    private void addClicktoBegin(int width, int height){
+        Image instruction2 = new Image(this.getClass().getClassLoader().getResourceAsStream(INSTRUCTION_TEXT2));
+        ClickToBegin = new ImageView(instruction2);
+        ClickToBegin.setLayoutX(width/2 -instructionalTextXAdjustment - instruction2.getWidth()/2);
+        ClickToBegin.setLayoutY(height/2 + instruction2.getHeight());
+        root.getChildren().add(ClickToBegin);
+    }
+
+    private void addBackGroundImagetoGroup() {
+        Image backgroundImage = new Image(this.getClass().getClassLoader().getResourceAsStream(BACKGROUND_IMAGE));
+        ImageView backgroundView = new ImageView(backgroundImage);
+        root.getChildren().add(backgroundView);
+
+    }
+
+    private void attachGameLoop() {
         frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
         animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -86,113 +228,6 @@ public class GamePlay extends Application{
         animation.play();
     }
 
-    /**
-     * Sets the value of the upcoming level.
-     * @param level_val
-     */
-    public void set_Level(int level_val){
-        myLevel = level_val;
-    }
-
-    /**
-     * Sets the score that was earned in previous levels.
-     * @param score
-     */
-    public void set_Score(int score){
-        old_score = score;
-    }
-
-    // Create the game's "scene": what shapes will be in the game and their starting properties
-    private Scene setupGame (int width, int height) throws Exception {
-        // create one top level collection to organize the things in the scene
-        Group root = new Group();
-
-        //Background Image:
-        Image backgroundImage = new Image(this.getClass().getClassLoader().getResourceAsStream(BACKGROUND_IMAGE));
-        ImageView backgroundView = new ImageView(backgroundImage);
-
-        //Instructional Text Images:
-        Image instruction1 = new Image(this.getClass().getClassLoader().getResourceAsStream(INSTRUCTION_TEXT1));
-        Image instruction2 = new Image(this.getClass().getClassLoader().getResourceAsStream(INSTRUCTION_TEXT2));
-
-        UseArrowKeys = new ImageView(instruction1);
-        UseArrowKeys.setLayoutX(width/2 - 50 - instruction1.getWidth()/2);                                 //MAGIC NUMBER, FIX LATER.
-        UseArrowKeys.setLayoutY(height/2 - instruction1.getHeight());
-
-        ClickToBegin = new ImageView(instruction2);
-        ClickToBegin.setLayoutX(width/2 -50 - instruction2.getWidth()/2);                                  //Magic number
-        ClickToBegin.setLayoutY(height/2 + instruction2.getHeight());
-
-        // make some shapes and set their properties
-        Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
-        myBall = makeBall(image, width, height);
-
-        myPaddle = new Paddle(SIZE + SIDEPANEL_SIZE, SIZE);
-        myPaddle.resetPaddleWidthToOriginal();
-        myPaddleView = myPaddle.getShape();
-
-        myBricks = makeBricks(myLevel);
-        myPowerUps = makePowerUps(myBricks);
-
-        //Labels to display player stats
-        Label levelLabel = new Label("LEVEL:");
-        levelLabel.setLayoutX(620);
-
-        levelLabel.setLayoutY(30);
-
-        Label levelValueLabel = new Label("" + myLevel);
-        levelValueLabel.setLayoutX(620);
-        levelValueLabel.setLayoutY(50);
-
-        Label scoreLabel = new Label("SCORE:");
-        scoreLabel.setLayoutX(620);
-        scoreLabel.setLayoutY(80);
-
-        scoreValueLabel = new Label("" + PLAYER_SCORE);
-        scoreValueLabel.setLayoutX(620);
-        scoreValueLabel.setLayoutY(100);
-
-        Label livesLabel = new Label("LIVES LEFT: ");
-        livesLabel.setLayoutX(620);
-        livesLabel.setLayoutY(130);
-
-        livesValueLabel = new Label(""+ PLAYER_LIVES);
-        livesValueLabel.setLayoutX(620);
-        livesValueLabel.setLayoutY(150);
-
-        // order added to the group is the order in which they are drawn
-
-        root.getChildren().add(backgroundView);
-
-        root.getChildren().addAll(levelLabel, levelValueLabel, scoreLabel, scoreValueLabel, livesLabel, livesValueLabel);
-
-        root.getChildren().add(myPaddleView);
-
-        root.getChildren().add(myBall.getView());
-
-        for (Brick brick : myBricks) {
-            root.getChildren().add(brick.getView());
-        }
-
-        for (powerUp pu : myPowerUps){
-            root.getChildren().add(pu.getView());
-        }
-
-        //ADD INSTRUCTION TEXT TO GROUP HERE.
-        root.getChildren().add(UseArrowKeys);
-        root.getChildren().add(ClickToBegin);
-
-        // create a place to see the shapes
-        Scene scene = new Scene(root, width, height);
-
-        // respond to input
-        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-        scene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
-        return scene;
-}
-
-    // Change properties of shapes in small ways to animate them over time
-    // Note, there are more sophisticated ways to animate shapes, but these simple ways work fine to start
     private void step (double elapsedTime) {
         //Get rid of instructional text at the start of each level/launching of the ball
         if(startClick){
@@ -338,9 +373,7 @@ public class GamePlay extends Application{
         myPaddleView = myPaddle.getShape();
     }
 
-    // What to do each time a key is pressed
     private void handleKeyInput (KeyCode code) {
-
         if (code == KeyCode.RIGHT && myPaddle.getShape().getX() < myScene.getWidth() - myPaddle.getShape().getWidth() - SIDEPANEL_SIZE) {
             myPaddle.moveRight();
             if(!startClick){
@@ -456,7 +489,6 @@ public class GamePlay extends Application{
         List<powerUp> result = new ArrayList<>();
             for(Brick brick : brickList){
                 powerUp p;
-
                 if(brick.getPowerUp().equals("strength")){
                     p = new powerUp(brick.getXLoc(),brick.getYLoc(), "strength");
                 }
@@ -502,25 +534,36 @@ public class GamePlay extends Application{
         }
     }
 
-    private void resetBallandPaddleifDead(){                                        //////////REFACTOR WITH isDead later!
-        if (myBall.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()) {
-            myPaddle.resetPaddleToStartingPosition(); //reset paddle to starting position
+    private void resetBallandPaddleifDead(){
+        if (isDead(myBall)) {
+            myPaddle.resetPaddleToStartingPosition();
             resetBall(myBall);
             startClick = false;
         }
     }
 
-    private boolean isDead(List<Bouncer> myBouncers){
-        for(Bouncer b: myBouncers){
-            if (b.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()) {
-                return true;
-            }
-        }
-        return false;
+    private boolean isDead(Bouncer ball){
+        return ball.getView().getBoundsInParent().getMaxY() >= myScene.getHeight();
     }
 
     private void resetBall(Bouncer bouncer){
         bouncer.resetPosAndVel();
+    }
+
+    /**
+     * Sets the value of the upcoming level.
+     * @param level_val
+     */
+    public void set_Level(int level_val){
+        myLevel = level_val;
+    }
+
+    /**
+     * Sets the score that was earned in previous levels.
+     * @param score
+     */
+    public void set_Score(int score){
+        old_score = score;
     }
 
     /**
