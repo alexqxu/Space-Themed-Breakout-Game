@@ -1,10 +1,13 @@
 package breakout;
 
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * Class that stores information and methods for Powerup objects
+ * @author Alex Xu
+ */
 public class powerUp {
     public static final int POWERUP_SPEED = 100;
     public static final int POWERUP_SIZE = 25;
@@ -14,10 +17,10 @@ public class powerUp {
     public static final String LENGTH_POWERUP_FILE = "lengthPowerUp.png";
     public static final String HEALTH_POWERUP_FILE = "healthPowerUp.png";
 
-    Image StrengthPowerUp = new Image(this.getClass().getClassLoader().getResourceAsStream(STRENGTH_POWERUP_FILE));
-    Image TimePowerUp = new Image(this.getClass().getClassLoader().getResourceAsStream(TIME_POWERUP_FILE));
-    Image LengthPowerUp = new Image(this.getClass().getClassLoader().getResourceAsStream(LENGTH_POWERUP_FILE));
-    Image HealthPowerUp = new Image(this.getClass().getClassLoader().getResourceAsStream(HEALTH_POWERUP_FILE));
+    private Image StrengthPowerUp = new Image(this.getClass().getClassLoader().getResourceAsStream(STRENGTH_POWERUP_FILE));
+    private Image TimePowerUp = new Image(this.getClass().getClassLoader().getResourceAsStream(TIME_POWERUP_FILE));
+    private Image LengthPowerUp = new Image(this.getClass().getClassLoader().getResourceAsStream(LENGTH_POWERUP_FILE));
+    private Image HealthPowerUp = new Image(this.getClass().getClassLoader().getResourceAsStream(HEALTH_POWERUP_FILE));
 
     Image image;
     private ImageView myView;
@@ -29,30 +32,85 @@ public class powerUp {
 
     private String myPowerUpType;
 
+    /**
+     * Constructs the powerup based on an X and Y coordinate position, as well as a String indicating the
+     * type of powerup.
+     * @param xPosition
+     * @param yPosition
+     * @param type
+     */
     public powerUp(int xPosition, int yPosition, String type){
         initXPosition = xPosition;
         initYPosition = yPosition;
-
         set_Type(type);
-
         myView = new ImageView(image);
-
         int size = POWERUP_SIZE;
         myView.setFitWidth(size);
         myView.setFitHeight(size);
-
-        myView.setX(initXPosition); //REFACTOR LATER IN THE STYLE THAT IS IN BOUNCER.JAVA
+        myView.setX(initXPosition);
         myView.setY(initYPosition);
-
         Enabled = true;
-        //myView.setImage(null);
     }
 
+    /**
+     * Moves the powerup, based on elapsedTime, standardized to all machines.
+     * @param elapsedTime
+     */
     public void move(double elapsedTime){
         myView.setY(myView.getY() + mySpeed * elapsedTime);
     }
 
-    public void set_Type(String typeOfPowerUp){
+    /**
+     * Deletes a powerup object by disabling it and hiding it from view
+     */
+    public void delete(){
+        disable();
+        hideImage();
+    }
+
+    /**
+     * Start dropping the powerup, from a velocity of 0.
+     */
+    public void startDrop(){
+        mySpeed = POWERUP_SPEED;
+    }
+
+    /**
+     * Return X coordinate of Powerup
+     */
+    public int getXPos(){
+        return initXPosition;
+    }
+
+    /**
+     * @Return Y coordinate of Powerup
+     */
+    public int getYPos(){
+        return initYPosition;
+    }
+
+    /**
+     * @Return the type of powerup
+     */
+    public String getPowerType(){
+        return myPowerUpType;
+    }
+
+    /**
+     * @Return whether the powerup is enabled
+     */
+    public boolean isEnabled(){
+        return Enabled;
+    }
+
+    /**
+     * Internal View of Powerup Object
+     */
+    public Node getView () {
+        return myView;
+    }
+
+    private void set_Type(String typeOfPowerUp){
         myPowerUpType = typeOfPowerUp;
         if(typeOfPowerUp.equals("strength")){
             set_Skin(1);
@@ -68,7 +126,7 @@ public class powerUp {
         }
     }
 
-    public void set_Skin(int val){
+    private void set_Skin(int val){
         if(val == 1){
             image = StrengthPowerUp;
         }
@@ -83,47 +141,11 @@ public class powerUp {
         }
     }
 
-    public void showImage(){   //Can get rid of later.
-        myView.setImage(image);
-    }
-
     private void hideImage(){
         myView.setImage(null);
     }
 
     private void disable(){
         Enabled=false;
-    }
-
-    public void delete(){
-        disable();
-        hideImage();
-    }
-
-    public void startDrop(){
-        mySpeed = POWERUP_SPEED;
-    }
-
-    public int getXPos(){
-        return initXPosition;
-    }
-
-    public int getYPos(){
-        return initYPosition;
-    }
-
-    public String getPowerType(){
-        return myPowerUpType;
-    }
-
-    public boolean isEnabled(){
-        return Enabled;
-    }
-
-    /**
-     * Internal View of Powerup Object
-     */
-    public Node getView () {
-        return myView;
     }
 }

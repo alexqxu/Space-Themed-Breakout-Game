@@ -24,6 +24,11 @@ public class Paddle {
     private int myLength = PADDLE_LENGTH;
     private int initialYLocationAdjustment = 250;
 
+    /**
+     * Constructs the paddle object and sets its location based on screen width and height
+     * @param screenWidth
+     * @param screenHeight
+     */
     public Paddle(int screenWidth, int screenHeight){
         myScreenWidth = screenWidth;
         myScreenHeight = screenHeight;
