@@ -5,52 +5,61 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * Class that stores information and methods for Powerup objects
+ * Abstract Superclass that stores information and methods for Powerup objects. The purpose of this class is to serve
+ * as a superclass for all of the subclasses. This class holds variables that are universal for all types of powerups.
+ * This new, refactored implementation takes advantage of inheritance, and makes adding a Powerup a matter of adding a
+ * subclass with the appropriate image/graphic associated with the Powerup. This utilizes inheritance concepts learned
+ * in class.
  * @author Alex Xu
  */
-public class powerUp {
+public abstract class powerUp {
     public static final int POWERUP_SPEED = 100;
     public static final int POWERUP_SIZE = 25;
 
-    public static final String STRENGTH_POWERUP_FILE = "strengthPowerUp.png";
-    public static final String TIME_POWERUP_FILE = "timePowerUp.png";
-    public static final String LENGTH_POWERUP_FILE = "lengthPowerUp.png";
-    public static final String HEALTH_POWERUP_FILE = "healthPowerUp.png";
-
-    private Image StrengthPowerUp = new Image(this.getClass().getClassLoader().getResourceAsStream(STRENGTH_POWERUP_FILE));
-    private Image TimePowerUp = new Image(this.getClass().getClassLoader().getResourceAsStream(TIME_POWERUP_FILE));
-    private Image LengthPowerUp = new Image(this.getClass().getClassLoader().getResourceAsStream(LENGTH_POWERUP_FILE));
-    private Image HealthPowerUp = new Image(this.getClass().getClassLoader().getResourceAsStream(HEALTH_POWERUP_FILE));
-
-    Image image;
+    private Image myImage;
     private ImageView myView;
-
     private int initXPosition;
     private int initYPosition;
     private int mySpeed = 0;
     private boolean Enabled;
-
-    private String myPowerUpType;
 
     /**
      * Constructs the powerup based on an X and Y coordinate position, as well as a String indicating the
      * type of powerup.
      * @param xPosition
      * @param yPosition
-     * @param type
      */
-    public powerUp(int xPosition, int yPosition, String type){
+    public powerUp(int xPosition, int yPosition){
         initXPosition = xPosition;
         initYPosition = yPosition;
-        set_Type(type);
-        myView = new ImageView(image);
+        Enabled = true;
+    }
+
+    /**
+     * Sets the Image of the powerUp, passed in from the subclasses.
+     * @param imageFileName
+     */
+    public void setImage(String imageFileName){
+        myImage = new Image(this.getClass().getClassLoader().getResourceAsStream(imageFileName));
+        setView();
+    }
+
+    /**
+     * Sets the ImageView of the powerUp, from the Image object.
+     */
+    public void setView(){
+        myView = new ImageView(myImage);
         int size = POWERUP_SIZE;
         myView.setFitWidth(size);
         myView.setFitHeight(size);
         myView.setX(initXPosition);
         myView.setY(initYPosition);
-        Enabled = true;
     }
+
+    /**
+     * @Return the type of Powerup, different for each type of Powerup (subclass)
+     */
+    public abstract String getPowerType();
 
     /**
      * Moves the powerup, based on elapsedTime, standardized to all machines.
@@ -90,13 +99,6 @@ public class powerUp {
     }
 
     /**
-     * @Return the type of powerup
-     */
-    public String getPowerType(){
-        return myPowerUpType;
-    }
-
-    /**
      * @Return whether the powerup is enabled
      */
     public boolean isEnabled(){
@@ -110,36 +112,6 @@ public class powerUp {
         return myView;
     }
 
-    private void set_Type(String typeOfPowerUp){
-        myPowerUpType = typeOfPowerUp;
-        if(typeOfPowerUp.equals("strength")){
-            set_Skin(1);
-        }
-        else if(typeOfPowerUp.equals("time")){
-            set_Skin(2);
-        }
-        else if(typeOfPowerUp.equals("length")){
-            set_Skin(3);
-        }
-        else if(typeOfPowerUp.equals("health")){
-            set_Skin(4);
-        }
-    }
-
-    private void set_Skin(int val){
-        if(val == 1){
-            image = StrengthPowerUp;
-        }
-        else if (val == 2){
-            image = TimePowerUp;
-        }
-        else if (val ==3){
-            image = LengthPowerUp;
-        }
-        else{
-            image = HealthPowerUp;
-        }
-    }
 
     private void hideImage(){
         myView.setImage(null);

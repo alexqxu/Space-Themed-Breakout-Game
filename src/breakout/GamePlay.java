@@ -397,19 +397,19 @@ public class GamePlay extends Application{
             for(Brick brick : brickList){
                 powerUp p;
                 if(brick.getPowerUp().equals("strength")){
-                    p = new powerUp(brick.getXLoc(),brick.getYLoc(), "strength");
+                    p = new strengthPowerUp(brick.getXLoc(),brick.getYLoc());
                 }
                 else if(brick.getPowerUp().equals("time")){
-                    p = new powerUp(brick.getXLoc(),brick.getYLoc(), "time");
+                    p = new timePowerUp(brick.getXLoc(),brick.getYLoc());
                 }
                 else if(brick.getPowerUp().equals("length")){
-                    p = new powerUp(brick.getXLoc(),brick.getYLoc(), "length");
+                    p = new lengthPowerUp(brick.getXLoc(),brick.getYLoc());
                 }
                 else if(brick.getPowerUp().equals("health")){
-                    p = new powerUp(brick.getXLoc(),brick.getYLoc(), "health");
+                    p = new healthPowerUp(brick.getXLoc(),brick.getYLoc());
                 }
                 else{
-                    p = new powerUp(brick.getXLoc(),brick.getYLoc(), "none");
+                    p = new nullPowerUp(brick.getXLoc(),brick.getYLoc());
                 }
                 result.add(p);
             }
