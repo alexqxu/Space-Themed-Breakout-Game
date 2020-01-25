@@ -436,7 +436,7 @@ public class GamePlay extends Application{
     }
 
     private void calcLives(){
-        if(myBall.getView().getBoundsInParent().getMaxY() >= myScene.getHeight()){
+        if(isDead(myBall)){
             PLAYER_LIVES--;
         }
     }
