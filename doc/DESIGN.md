@@ -6,7 +6,7 @@ NetID: aqx
 
 *(This was an individual project, so I completed all aspects of the project.)*
 
-###What are the project's design goals, specifically what kinds of new features did you want to make easy to add?
+### What are the project's design goals, specifically what kinds of new features did you want to make easy to add?
 
 The project's design goal was to create an implementation of a game based on the classic Breakout Game, in a way that allows for flexibility
 in adding new features. For example, I designed my code that allows for relatively easy design of new game levels, by modifying
@@ -41,7 +41,7 @@ writing code in this way, as I was more focused on functionality rather than cod
 lectures and assigned readings, I've developed a better understanding and appreciation for software design concepts (including
 polymorphism and inheritance, which I plan to use to refactor my code).
 
-###Describe the high-level design of your project, focusing on the purpose and interaction of the core classes?
+### Describe the high-level design of your project, focusing on the purpose and interaction of the core classes?
 
 The mainMenu class is the "Main" class of my game that should be run. It is responsible for constructing the appearance
 and functionality of the Splash Screen and Rules Screen (screen that displays the rules of the game). The rules screen is a
@@ -81,7 +81,7 @@ option to go back to the Splash screen (with previous game stats erased). If the
 more levels left), the dialogueScreen will instead construct and display the Game Win screen (which tells the player that they
 have won the game), and also give them the option to go back to the Splash screen.
 
-###What assumptions or decisions were made to simplify your project's design, especially those that affected adding required features?
+### What assumptions or decisions were made to simplify your project's design, especially those that affected adding required features?
 
 As mentioned previously, the decision to make the Paddle, Bouncer (ball), bricks, and Powerups their own class greatly simplified
 the design of my project, since it was easier to create new instances of these objects rather than to hard code their attributes
@@ -103,7 +103,7 @@ many different possibilities for even the core game mechanics. Since that was no
 that these core game mechanics would remain the same, and that additional features would be focused on diversifying gameplay
 with different kinds of objects.
 
-###Describe, in detail, how to add new features to your project, especially ones you were not able to complete by the deadline?
+### Describe, in detail, how to add new features to your project, especially ones you were not able to complete by the deadline?
 
 * **Additional features that can be implemented / modified:**
 
