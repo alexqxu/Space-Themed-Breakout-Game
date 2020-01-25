@@ -39,7 +39,7 @@ appearance and behavior) to make that possible. Currently if one would like to a
 would have to add it to the single Powerup class, and add a conditional case. Before coming into CS 308 I did not think much about
 writing code in this way, as I was more focused on functionality rather than code design. However, after this past week's
 lectures and assigned readings, I've developed a better understanding and appreciation for software design concepts (including
-abstraction and inheritance, which I plan to use to refactor my code).
+polymorphism and inheritance, which I plan to use to refactor my code).
 
 ###Describe the high-level design of your project, focusing on the purpose and interaction of the core classes?
 
