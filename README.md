@@ -127,11 +127,3 @@ by power up (slightly bigger). I have implemented these features.
         * 4: Health - Add a life
     * The game automatically reads the file and lays the bricks. There are six bricks per row and this
     process is automatic.
-
-### Impressions
-I thought that this project was quite difficult, given that I had zero experience in JavaFX before this project.
-That meant that it took me quite a long time to get up to speed regarding how to use JavaFX and how it works, before 
-starting to design my game and to guage what is possible. In addition, because of this, I was unsure of some aspects of my 
-game plan, becuase I did not know what was possible/what could be easy or hard to implement. As a suggestion for future improvement,
-perhaps assigning JavaFX tutorials before assigning the project plan assignment would be beneficial for students new to 
-JavaFX, and not give them a disadvantage as a result. Thank you for grading my project!
