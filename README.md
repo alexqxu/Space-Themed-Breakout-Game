@@ -1,9 +1,4 @@
-game
-====
-
-This project implements the game of Breakout.
-
-Name: Alex Xu (aqx)
+This project implements a space-themed game of Breakout.
 
 ### Timeline
 
